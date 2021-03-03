@@ -50,6 +50,8 @@ QLineEdit{
 QLabel{
 	font: 300 20pt "Arial";
 	color: #3333ff;
+	border-radius: 10px;
+	padding: 5px;
 }
 QTreeWidget{
 	border-radius: 10px;

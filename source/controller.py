@@ -3,6 +3,7 @@
 from interface import Interface
 from PySide2 import QtWidgets, QtGui, QtCore
 from crud import queryCod, queryCodDynamic
+from toplevels import SearchItems, FinallyPurchasing
 from reimplemented import ListWidget, Buttons, HOVER, DEFAULT
 import sys
 
@@ -14,12 +15,18 @@ class MyApp(Interface):
     def __init__(self):
         super(MyApp, self).__init__()
         self.btSearch.function = self.searchItens
+        self.btFinish.function = self.finished
         self.entryCod.textEdited.connect(self.entryText)
         self.entryCod.returnPressed.connect(self.enterPress)
         self.entryCod.setFocus()
         self.btSearch.clicked.connect(self.searchItens)
+        self.btFinish.clicked.connect(self.finished)
 
     def entryText(self, e):
+        '''
+        filtra a entrada de texto para ver se tem algum 
+        multiplicador
+        '''
         self.qtd = '1'
         self.lista = []
         if '*' in e:
@@ -30,6 +37,10 @@ class MyApp(Interface):
             self.lista = queryCod(e)
 
     def enterPress(self):
+        '''
+        espera enter ser apertado para atualizar os Widgets 
+        na tela principal.
+        '''
         if self.lista:
             self.item = QtWidgets.QTreeWidgetItem()
             self.valor = int(self.qtd) * self.lista[0][2]
@@ -47,45 +58,12 @@ class MyApp(Interface):
                 self.item.setText(3, self.showCurrent)
                 self.lbPriceCurrent.setText(self.currentPrice)
                 self.lbPriceTotal.setText(self.formatado)
-            return
 
     def searchItens(self):
-        self.search = QtWidgets.QDialog(self)
-        grid = QtWidgets.QGridLayout(self.search)
-        self.searchLine = QtWidgets.QLineEdit()
-        btSearch = Buttons('Feito', HOVER, DEFAULT)
-        self.listItems = ListWidget()
-        frase = f'TAB:selecionar{" "*5}ENTER:confirmar{" "*5}ESPAÇO:listar'
-        infos = QtWidgets.QLabel(frase)
-        infos.setStyleSheet('font-size: 15px;')
-        btSearch.clicked.connect(self.concluded)
-        self.searchLine.textEdited.connect(self.searching)
-        self.search.resize(500, 350)
-        grid.addWidget(self.searchLine, 0, 0)
-        grid.addWidget(btSearch, 0, 1)
-        grid.addWidget(self.listItems, 1, 0, 1, 2)
-        grid.addWidget(infos, 2, 0)
-        self.search.setTabOrder(self.searchLine, self.listItems)
-        self.search.exec_()
+        SearchItems(self)
 
-    def searching(self, e):
-        prods = queryCodDynamic(e)
-        self.listItems.clear()
-        for itens in prods:
-            self.listItems.addItems(itens[1:2])
-        self.listItems.currentItemChanged.connect(self.listItemsGet)
-        self.listItems.itemClicked.connect(self.listItemsGet)
-
-    def listItemsGet(self):
-        item = self.listItems.currentItem()
-        prods = queryCodDynamic(item.text())
-        self.entryCod.clear()
-        self.entryCod.insert(prods[0][0])
-
-    def concluded(self):
-        self.search.close()
-        self.entryCod.setFocus()
-
+    def finished(self):
+        FinallyPurchasing(self)
 
 if __name__ == '__main__':
     app = QtWidgets.QApplication(sys.argv)
