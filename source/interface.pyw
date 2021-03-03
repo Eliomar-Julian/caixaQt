@@ -2,7 +2,7 @@
 
 from PySide2 import QtCore, QtGui, QtWidgets
 from load_style import getStyle
-from buttons import Buttons, HOVER, DEFAULT
+from reimplemented import Buttons, HOVER, DEFAULT
 import sys
 
 

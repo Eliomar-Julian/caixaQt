@@ -15,7 +15,10 @@ QPushButton{
 	color:  #3333ff;
 }
 QPushButton:hover{
-	background-color: qlineargradient(spread:pad, x1:0.148492, y1:0.261, x2:0.928, y2:0.54, stop:0 rgba(109, 201, 222, 255), stop:1 rgba(255, 255, 255, 255));
+	background-color: qlineargradient(
+	spread:pad, x1:0.148492, y1:0.261,
+	x2:0.928, y2:0.54, stop:0 rgba(109, 201, 222, 255),
+	stop:1 rgba(255, 255, 255, 255));
 	color: red;
 }
 #showLabelPrice{
@@ -54,4 +57,7 @@ QTreeWidget{
 	border-style: solid;
 	border-color: red;
 	border-radius: 5px;
+}
+QDialog {
+	background-color:  #0099ff;
 }
