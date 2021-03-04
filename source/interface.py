@@ -1,9 +1,8 @@
 #!/usr/bin/python3
 
 from PySide2 import QtCore, QtGui, QtWidgets
-from load_style import getStyle
+from loadconfigs import getStyle
 from reimplemented import Buttons, HOVER, DEFAULT
-import sys
 
 
 class Interface(QtWidgets.QWidget):
@@ -24,6 +23,8 @@ class Interface(QtWidgets.QWidget):
         self.setWidgetName()
         self.pushStyle()
 
+    # // mostra o logo...
+
     def startLogo(self):
         image = QtGui.QPixmap('images/cart.png')
         self.frameLogo = QtWidgets.QFrame()
@@ -35,21 +36,25 @@ class Interface(QtWidgets.QWidget):
         conteiner.addWidget(self.logo)
         self.places.addWidget(self.frameLogo, 0, 0)
 
+    # // desenha o conteiner dos botoes...
+
     def buttons(self):
         self.frameButtons = QtWidgets.QFrame()
         self.btSearch = Buttons('Buscar', HOVER, DEFAULT)
+        self.btThing = Buttons('Troco', HOVER, DEFAULT)
         self.btFinish = Buttons('Finalizar', HOVER, DEFAULT)
-        self.btCancel = Buttons('Cancelar', HOVER, DEFAULT)
         self.btRemove = Buttons('Remover', HOVER, DEFAULT)
         conteiner = QtWidgets.QGridLayout(self.frameButtons)
         widget = [
-            self.btSearch, self.btFinish,
-            self.btCancel, self.btRemove
+            self.btSearch, self.btThing,
+            self.btFinish, self.btRemove
         ]
         for wid in widget:
             conteiner.addWidget(wid)
             wid.setCursor(QtCore.Qt.PointingHandCursor)
         self.places.addWidget(self.frameButtons, 1, 0)
+
+    # // desenha a treeview...
 
     def purchasingView(self):
         self.framePurchase = QtWidgets.QFrame()
@@ -64,6 +69,8 @@ class Interface(QtWidgets.QWidget):
         conteiner.addWidget(self.entryCod)
         conteiner.addWidget(self.tree)
         self.places.addWidget(self.framePurchase, 0, 1)
+
+    # // mostra os labels de preco total e corrente...
 
     def pricesShow(self):
         self.framePrices = QtWidgets.QFrame()

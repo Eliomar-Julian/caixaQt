@@ -4,18 +4,17 @@ from PySide2 import QtCore, QtWidgets
 
 
 class SearchItems:
-    def __init__(self, parent) -> None:
-        '''
-        classe responsavel por busca os itens no banco
-        e listar no treeview.
-        '''
+    '''
+    classe responsavel por busca os itens no banco
+    e listar no treeview.
+    '''
+    def __init__(self, parent) -> None:        
         self.parent = parent
         self.searchItemsFunction()
     
+    # //Desenha a janela top level de busca
+    
     def searchItemsFunction(self):
-        '''
-        Desenha a janela top level de busca
-        '''
         self.search = QtWidgets.QDialog(self.parent)
         self.grid = QtWidgets.QGridLayout(self.search)
         self.searchLine = QtWidgets.QLineEdit()
@@ -34,11 +33,10 @@ class SearchItems:
         self.search.setTabOrder(self.searchLine, self.listItems)
         self.search.exec_()
 
-    def searching(self, e):
-        '''
-        Invocado a cada tecla pressionada e varre
-        dinamicamente o banco.
-        '''
+    # // Invocado a cada tecla pressionada e varre
+    # dinamicamente o banco.
+    
+    def searching(self, e):        
         prods = queryCodDynamic(e)
         self.listItems.clear()
         for itens in prods:
@@ -46,38 +44,35 @@ class SearchItems:
         self.listItems.currentItemChanged.connect(self.listItemsGet)
         self.listItems.itemClicked.connect(self.listItemsGet)
 
-    def listItemsGet(self):
-        '''
-        pega o produto selecionado e adiciona o codigo
-        na linha de entrada de codigo da janela principal.
-        '''
+    # // pega o produto selecionado e adiciona o codigo
+    # na linha de entrada de codigo da janela principal.
+
+    def listItemsGet(self):    
         self.item = self.listItems.currentItem()
         self.prods = queryCodDynamic(self.item.text())
         self.parent.entryCod.clear()
         self.parent.entryCod.insert(self.prods[0][0])
 
-    def concluded(self):
-        '''
-        fecha a janela de buscas e direciona o foco
-        para a linha de entrda da janela principal.
-        '''
+    # // fecha a janela de buscas e direciona o foco
+    # para a linha de entrda da janela principal.
+
+    def concluded(self):        
         self.search.close()
         self.parent.entryCod.setFocus()
 
 
 class FinallyPurchasing:
-    def __init__(self, parent) -> None:
-        '''
-        Classe responsavel por finalizar a compra atual
-        e zerar os contadores da janela principal
-        '''
+    '''
+    Classe responsavel por finalizar a compra atual
+    e zerar os contadores da janela principal
+    '''
+    def __init__(self, parent) -> None:        
         self.parent = parent
         self.top()
 
-    def top(self):
-        '''
-        desenhando a janela de finalização...
-        '''
+    # // desenhando a janela de finalização...
+
+    def top(self):        
         self.root = QtWidgets.QDialog(self.parent)
         self.grid = QtWidgets.QVBoxLayout(self.root)
         self.labelInfoTotal = QtWidgets.QLabel('total da compra')
@@ -89,7 +84,7 @@ class FinallyPurchasing:
         self.labelThingMoney = QtWidgets.QLabel('R$ 0,00')
         self.buttonConteiner = QtWidgets.QFrame()
         grid = QtWidgets.QGridLayout(self.buttonConteiner)
-        self.btFinished_ = QtWidgets.QPushButton('Finalizar')
+        self.btFinished_ = QtWidgets.QPushButton('Sair')
         self.btCupom_ = QtWidgets.QPushButton('Imprimir cupom')
         self.entMoney.returnPressed.connect(self.thingMoney)
         self.entMoney.setFocus()
@@ -108,11 +103,12 @@ class FinallyPurchasing:
         grid.addWidget(self.btCupom_, 0, 1)
         self.root.exec_()
 
-    def thingMoney(self):
-        '''
-        mostra o valor do troco na tela.
-        '''
+    # // mostra o valor do troco na tela.
+    
+    def thingMoney(self):      
         tot = self.parent.TOTAL
         val = float(self.entMoney.text().replace(',', '.'))
         show = val - tot
         self.labelThingMoney.setText(f'R$ {show:.2f}'.replace('.', ','))
+
+    
