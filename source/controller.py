@@ -1,12 +1,10 @@
 #!/usr/bin/python3
 
 from interface import Interface
-from PySide2 import QtWidgets, QtGui, QtCore
-from crud import queryCod, queryCodDynamic
-from toplevels import SearchItems, FinallyPurchasing
-from reimplemented import ListWidget, Buttons, HOVER, DEFAULT
+from PySide2 import QtWidgets
+from toplevels import SearchItems, FinallyPurchasing, Login
 from loadconfigs import saveTotal
-import sys
+from crud import queryCod
 
 
 class MyApp(Interface):
@@ -20,17 +18,18 @@ class MyApp(Interface):
         self.btSearch.function = self.searchItens
         self.btThing.function = self.finished
         self.btFinish.function = self.finishVars
+        self.btRemove.function = self.removeItem
         self.entryCod.textEdited.connect(self.entryText)
         self.entryCod.returnPressed.connect(self.enterPress)
         self.entryCod.setFocus()
         self.btSearch.clicked.connect(self.searchItens)
         self.btThing.clicked.connect(self.finished)
         self.btFinish.clicked.connect(self.finishVars)
+        self.btRemove.clicked.connect(self.removeItem)
 
-
-    # // filtra a entrada de texto para ver se tem algum 
+    # // filtra a entrada de texto para ver se tem algum
     # multiplicador
-    
+
     def entryText(self, e):
         self.qtd = '1'
         self.lista = []
@@ -40,10 +39,10 @@ class MyApp(Interface):
             self.lista = queryCod(e[:indice])
         else:
             self.lista = queryCod(e)
-    
-    # // espera enter ser apertado para atualizar os Widgets 
+
+    # // espera enter ser apertado para atualizar os Widgets
     # na tela principal.
-    
+
     def enterPress(self):
         if self.lista:
             self.item = QtWidgets.QTreeWidgetItem()
@@ -58,13 +57,48 @@ class MyApp(Interface):
                 self.item.setText(0, self.lista[0][1])
                 self.item.setText(1, self.qtd + ' x')
                 self.item.setText(2, self.vaUni)
-                self.tree.insertTopLevelItem(0, self.item)
                 self.item.setText(3, self.showCurrent)
+                self.tree.insertTopLevelItem(0, self.item)
                 self.lbPriceCurrent.setText(self.currentPrice)
                 self.lbPriceTotal.setText(self.formatado)
 
+    # // remove os itens selecionados na lista de compras
+
+    def removeItem(self):
+        login = Login(self)
+        if not login.queryUser():
+            return
+        item = self.tree.currentItem()
+        indexItem = self.tree.indexOfTopLevelItem(item)
+        count = self.tree.topLevelItemCount()
+        totalPrice = float(item.text(3)[2:].replace(',', '.'))
+        if indexItem != 0:
+            self.TOTAL -= totalPrice
+            self.item.removeChild(item)
+        elif indexItem == 0:
+            print('nao é possivel remover o primeiro item')
+            if count == 1:
+                self.TOTAL -= totalPrice
+                self.tree.clear()
+        elif indexItem < 0:
+            self.TOTAL = 0
+        self.labelUpdate(item)
+
+    # // atualiza as amostras de preços da tela...
+
+    def labelUpdate(self, i):
+        try:
+            self.lbPriceCurrent.setText(i.text(3))
+        except:
+            self.lbPriceCurrent.setText('R$ 0,00')
+        self.lbPriceTotal.setText(f'R$ {self.TOTAL:.2f}'.replace('.', ','))
+
+    # // chama a função de busca de produtos no banco de dados...
+
     def searchItens(self):
         SearchItems(self)
+
+    # // chama a função de finalizar a compra atual
 
     def finished(self):
         FinallyPurchasing(self)
@@ -85,10 +119,3 @@ class MyApp(Interface):
             self.lbPriceCurrent.setText('R$ 0,00')
             self.lbPriceTotal.setText('R$ 0,00')
             self.tree.clear()
-
-
-if __name__ == '__main__':
-    app = QtWidgets.QApplication(sys.argv)
-    form = MyApp()
-    form.show()
-    sys.exit(app.exec_())
