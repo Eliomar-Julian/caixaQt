@@ -1,6 +1,10 @@
 #mainWindow{
 	background-color:  #0099ff;
 }
+QMenuBar {
+	background-color: #0099ff;
+	color: #3333ff;
+}
 QPushButton{
 	background-color:  #0099ff;
 	selection-color: #fff;

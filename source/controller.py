@@ -26,6 +26,10 @@ class MyApp(Interface):
         self.btThing.clicked.connect(self.finished)
         self.btFinish.clicked.connect(self.finishVars)
         self.btRemove.clicked.connect(self.removeItem)
+        self.menuBar.cadProd.triggered.connect(self.cadProdFunc)
+        self.menuBar.cadUser.triggered.connect(self.cadUserFunc)
+        self.menuBar.styl.triggered.connect(self.stylFunc)
+        self.menuBar.icon.triggered.connect(self.iconFunc)
 
     # // filtra a entrada de texto para ver se tem algum
     # multiplicador
@@ -70,18 +74,9 @@ class MyApp(Interface):
             return
         item = self.tree.currentItem()
         indexItem = self.tree.indexOfTopLevelItem(item)
-        count = self.tree.topLevelItemCount()
         totalPrice = float(item.text(3)[2:].replace(',', '.'))
-        if indexItem != 0:
-            self.TOTAL -= totalPrice
-            self.item.removeChild(item)
-        elif indexItem == 0:
-            print('nao é possivel remover o primeiro item')
-            if count == 1:
-                self.TOTAL -= totalPrice
-                self.tree.clear()
-        elif indexItem < 0:
-            self.TOTAL = 0
+        self.tree.takeTopLevelItem(indexItem)
+        self.TOTAL -= totalPrice
         self.labelUpdate(item)
 
     # // atualiza as amostras de preços da tela...
@@ -119,3 +114,15 @@ class MyApp(Interface):
             self.lbPriceCurrent.setText('R$ 0,00')
             self.lbPriceTotal.setText('R$ 0,00')
             self.tree.clear()
+
+    def cadProdFunc(self):
+        print('cadProdFunc')
+
+    def cadUserFunc(self):
+        print('cadUserFunc')
+
+    def stylFunc(self):
+        print('stylFunc')
+
+    def iconFunc(self):
+        print('iconFunc')

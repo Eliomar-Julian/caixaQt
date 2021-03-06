@@ -3,6 +3,7 @@
 from PySide2 import QtCore, QtGui, QtWidgets
 from loadconfigs import getStyle
 from reimplemented import Buttons, HOVER, DEFAULT
+from menu import MyMenu
 
 
 class Interface(QtWidgets.QWidget):
@@ -22,8 +23,12 @@ class Interface(QtWidgets.QWidget):
         self.pricesShow()
         self.setWidgetName()
         self.pushStyle()
+        self.menu()
 
     # // mostra o logo...
+
+    def menu(self):
+        self.menuBar = MyMenu(self)
 
     def startLogo(self):
         image = QtGui.QPixmap('images/cart.png')

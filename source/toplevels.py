@@ -152,6 +152,5 @@ class Login:
         self.root.close()
         QtWidgets.QMessageBox.warning(
             self.parent, 'Erro',
-            'Senha ou usuário incorretos, item NÃO removido!'
-        )
+            'Senha ou usuário incorretos, item NÃO removido!')
         return False
