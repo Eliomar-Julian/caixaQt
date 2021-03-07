@@ -9,6 +9,10 @@ DEFAULT = '#0099ff'
 
 
 class Buttons(QtWidgets.QPushButton):
+    '''
+    Reeimplemntado os botoes
+    '''
+
     def __init__(self, text, style, defaultColor):
         self.text_ = text
         self.style_ = style
@@ -17,11 +21,17 @@ class Buttons(QtWidgets.QPushButton):
         QtWidgets.QPushButton.__init__(self)
         self.setText(self.text_)
 
+    # // adiciona estilo degrade quando o botão é focalizado atraves de um tab
+
     def focusInEvent(self, event):
         self.setStyleSheet(self.style_)
 
+    # // traz a cor padrão quando o botão sai de foco...
+
     def focusOutEvent(self, event):
         self.setStyleSheet(self.defaultColor_)
+
+    # // espera enter se apertado para lhe atribuir um metodo...
 
     def keyPressEvent(self, event):
         numEnter = QtCore.Qt.Key_Enter

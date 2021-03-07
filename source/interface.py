@@ -69,7 +69,7 @@ class Interface(QtWidgets.QWidget):
         self.tree = QtWidgets.QTreeWidget()
         self.tree.setWordWrap(False)
         self.tree.setHeaderLabels(('Produto', 'Qunt.', 'Preço', 'Total'))
-        self.tree.setColumnWidth(0, 320)
+        self.tree.setColumnWidth(0, 400)
         conteiner.addWidget(label)
         conteiner.addWidget(self.entryCod)
         conteiner.addWidget(self.tree)
@@ -85,8 +85,10 @@ class Interface(QtWidgets.QWidget):
         self.lbPriceTextTotal = QtWidgets.QLabel('Total da Compra')
         self.lbPriceTotal = QtWidgets.QLabel('R$ 0,00')
         widgets = [
-            self.lbPriceText, self.lbPriceCurrent,
-            self.lbPriceTextTotal, self.lbPriceTotal
+            self.lbPriceText,
+            self.lbPriceCurrent,
+            self.lbPriceTextTotal,
+            self.lbPriceTotal
         ]
         for wid in widgets:
             conteiner.addWidget(wid)

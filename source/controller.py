@@ -5,6 +5,7 @@ from PySide2 import QtWidgets
 from toplevels import SearchItems, FinallyPurchasing, Login
 from loadconfigs import saveTotal
 from crud import queryCod
+from menu import CadProd, Message
 
 
 class MyApp(Interface):
@@ -21,7 +22,6 @@ class MyApp(Interface):
         self.btRemove.function = self.removeItem
         self.entryCod.textEdited.connect(self.entryText)
         self.entryCod.returnPressed.connect(self.enterPress)
-        self.entryCod.setFocus()
         self.btSearch.clicked.connect(self.searchItens)
         self.btThing.clicked.connect(self.finished)
         self.btFinish.clicked.connect(self.finishVars)
@@ -30,19 +30,21 @@ class MyApp(Interface):
         self.menuBar.cadUser.triggered.connect(self.cadUserFunc)
         self.menuBar.styl.triggered.connect(self.stylFunc)
         self.menuBar.icon.triggered.connect(self.iconFunc)
+        self.menuBar.overCashieAct.triggered.connect(self.overCashieFunc)
+        self.entryCod.setFocus()
 
     # // filtra a entrada de texto para ver se tem algum
     # multiplicador
 
-    def entryText(self, e):
-        self.qtd = '1'
-        self.lista = []
-        if '*' in e:
-            indice = e.index('*')
-            self.qtd = e[indice + 1:]
-            self.lista = queryCod(e[:indice])
+    def entryText(self, eventText):
+        self.quantify = str(' 1')
+        self.lista = list()
+        if str('*') in eventText:
+            self.indice_ = eventText.index('*')
+            self.quantify = eventText[self.indice_ + 1:]
+            self.lista = queryCod(eventText[:self.indice_])
         else:
-            self.lista = queryCod(e)
+            self.lista = queryCod(eventText)
 
     # // espera enter ser apertado para atualizar os Widgets
     # na tela principal.
@@ -50,7 +52,7 @@ class MyApp(Interface):
     def enterPress(self):
         if self.lista:
             self.item = QtWidgets.QTreeWidgetItem()
-            self.valor = int(self.qtd) * self.lista[0][2]
+            self.valor = int(self.quantify) * self.lista[0][2]
             self.TOTAL += self.valor
             self.valActual = f'{self.valor:.2f}'
             self.formatado = str('R$ %.2f' % (self.TOTAL)).replace('.', ',')
@@ -59,7 +61,7 @@ class MyApp(Interface):
             self.showCurrent = 'R$ ' + str(self.valActual).replace('.', ',')
             if self.valor > 0:
                 self.item.setText(0, self.lista[0][1])
-                self.item.setText(1, self.qtd + ' x')
+                self.item.setText(1, self.quantify + ' x')
                 self.item.setText(2, self.vaUni)
                 self.item.setText(3, self.showCurrent)
                 self.tree.insertTopLevelItem(0, self.item)
@@ -70,23 +72,64 @@ class MyApp(Interface):
 
     def removeItem(self):
         login = Login(self)
-        if not login.queryUser():
-            return
-        item = self.tree.currentItem()
-        indexItem = self.tree.indexOfTopLevelItem(item)
-        totalPrice = float(item.text(3)[2:].replace(',', '.'))
-        self.tree.takeTopLevelItem(indexItem)
-        self.TOTAL -= totalPrice
-        self.labelUpdate(item)
+        if login.queryUser():
+            item = self.tree.currentItem()
+            indexItem = self.tree.indexOfTopLevelItem(item)
+            totalPrice = float(item.text(3)[2:].replace(',', '.'))
+            self.tree.takeTopLevelItem(indexItem)
+            self.TOTAL -= totalPrice
+            self.labelUpdate(item)
 
     # // atualiza as amostras de preços da tela...
 
     def labelUpdate(self, i):
         try:
             self.lbPriceCurrent.setText(i.text(3))
-        except:
+        except AttributeError:
             self.lbPriceCurrent.setText('R$ 0,00')
         self.lbPriceTotal.setText(f'R$ {self.TOTAL:.2f}'.replace('.', ','))
+
+    # // finaliza a venda atual e zera variaveis...
+
+    def finishVars(self):
+        ok = QtWidgets.QMessageBox.StandardButton.Ok
+        cancel = QtWidgets.QMessageBox.StandardButton.Cancel
+        message = 'Realmnte deseja finalizar essa compra?'
+        title = 'Finalizar'
+        resp = QtWidgets.QMessageBox.warning(
+            self, title, message, ok | cancel)
+        if resp == ok:
+            saveTotal(self.TOTAL)
+            self.TOTAL = 0
+            self.lbPriceCurrent.setText('R$ 0,00')
+            self.lbPriceTotal.setText('R$ 0,00')
+            self.tree.clear()
+
+    # // abre janela de cadastro de produtos...
+
+    def cadProdFunc(self):
+        validate = Login(self)
+        if validate.queryUser() == (True):
+            CadProd(self)
+        Message.error(
+            parent=self, title='Erro de autenticação',
+            message='Código ou senha invalido.'
+        )
+
+    # // abre janela de cadastro de usuarios
+
+    def cadUserFunc(self):
+        print('cadUserFunc')
+
+    # muda a cor de fundo e de frente da aplicação
+
+    def stylFunc(self):
+        print('stylFunc')
+
+    # // muda o logo do estabelecimento
+
+    def iconFunc(self):
+        print('iconFunc')
 
     # // chama a função de busca de produtos no banco de dados...
 
@@ -98,31 +141,8 @@ class MyApp(Interface):
     def finished(self):
         FinallyPurchasing(self)
 
-    # // finaliza a venda atual e zera variaveis...
+    # // encerra as operações do dia de caixa ....
 
-    def finishVars(self):
-        ok = QtWidgets.QMessageBox.StandardButton.Ok
-        cancel = QtWidgets.QMessageBox.StandardButton.Cancel
-        message = 'Realmnte deseja finalizar essa compra?'
-        title = 'Finalizar'
-        resp = QtWidgets.QMessageBox.warning(
-            self, title, message, ok | cancel
-        )
-        if resp == ok:
-            saveTotal(self.TOTAL)
-            self.TOTAL = 0
-            self.lbPriceCurrent.setText('R$ 0,00')
-            self.lbPriceTotal.setText('R$ 0,00')
-            self.tree.clear()
-
-    def cadProdFunc(self):
-        print('cadProdFunc')
-
-    def cadUserFunc(self):
-        print('cadUserFunc')
-
-    def stylFunc(self):
-        print('stylFunc')
-
-    def iconFunc(self):
-        print('iconFunc')
+    def overCashieFunc(self):
+        login = Login(self)
+        print(login.queryUser())

@@ -146,11 +146,13 @@ class Login:
         user = self.entName.text()
         passw = self.enPassw.text()
         data = queryAdmin(user)
-        if user == data[0][0] and passw == data[0][1]:
-            self.root.close()
-            return True
+        try:
+            if user == data[0][0] and passw == data[0][1]:
+                self.root.close()
+                return True
+        except IndexError:
+            pass
         self.root.close()
         QtWidgets.QMessageBox.warning(
-            self.parent, 'Erro',
-            'Senha ou usuário incorretos, item NÃO removido!')
+            self.parent, 'Erro', 'Senha ou usuário incorretos')
         return False
