@@ -2,8 +2,9 @@ from PySide2 import QtWidgets, QtCore
 
 HOVER = 'background-color: qlineargradient(\
 spread:pad, x1:0.148492, y1:0.261, x2:0.928,\
-y2:0.54, stop:0 rgba(109, 201, 222, 255),\
-stop:1 rgba(255, 255, 255, 255));'
+y2:0.54, stop:0 rgba(109, 201, 222, 20),\
+stop:1 rgba(255, 255, 255, 50));\
+color: red;'
 
 DEFAULT = '#0099ff'
 

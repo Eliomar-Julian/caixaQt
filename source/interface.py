@@ -70,6 +70,8 @@ class Interface(QtWidgets.QWidget):
         self.tree.setWordWrap(False)
         self.tree.setHeaderLabels(('Produto', 'Qunt.', 'Preço', 'Total'))
         self.tree.setColumnWidth(0, 400)
+        self.tree.setHorizontalScrollBarPolicy(QtCore.Qt.ScrollBarAlwaysOff)
+        self.tree.setVerticalScrollBarPolicy(QtCore.Qt.ScrollBarAlwaysOff)
         conteiner.addWidget(label)
         conteiner.addWidget(self.entryCod)
         conteiner.addWidget(self.tree)

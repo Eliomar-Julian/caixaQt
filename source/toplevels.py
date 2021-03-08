@@ -1,6 +1,7 @@
-from reimplemented import ListWidget, Buttons, HOVER, DEFAULT
-from crud import queryCodDynamic, queryAdmin
+from reimplemented import *
+from crud import *
 from PySide2 import QtWidgets
+from menu import *
 
 
 class SearchItems:
@@ -70,8 +71,9 @@ class FinallyPurchasing:
     e zerar os contadores da janela principal
     '''
 
-    def __init__(self, parent) -> None:
+    def __init__(self, parent, valor) -> None:
         self.parent = parent
+        self.valor = valor
         self.top()
 
     # // desenhando a janela de finalização...
@@ -110,7 +112,7 @@ class FinallyPurchasing:
     # // mostra o valor do troco na tela.
 
     def thingMoney(self):
-        tot = self.parent.TOTAL
+        tot = self.valor
         val = float(self.entMoney.text().replace(',', '.'))
         show = val - tot
         self.labelThingMoney.setText(f'R$ {show:.2f}'.replace('.', ','))
@@ -128,9 +130,9 @@ class Login:
         label2 = QtWidgets.QLabel('Senha: ')
         self.entName = QtWidgets.QLineEdit()
         self.enPassw = QtWidgets.QLineEdit()
-        self.enPassw.setEchoMode(QtWidgets.QLineEdit.Password)
         self.btOk = QtWidgets.QPushButton('Ok')
         grid = QtWidgets.QGridLayout(self.root)
+        self.enPassw.setEchoMode(QtWidgets.QLineEdit.Password)
         self.btOk.clicked.connect(self.queryUser)
         grid.addWidget(label1, 0, 0)
         grid.addWidget(self.entName, 0, 1)
@@ -146,6 +148,7 @@ class Login:
         user = self.entName.text()
         passw = self.enPassw.text()
         data = queryAdmin(user)
+        msg = 'Senha ou usuário incorretos'
         try:
             if user == data[0][0] and passw == data[0][1]:
                 self.root.close()
@@ -153,6 +156,5 @@ class Login:
         except IndexError:
             pass
         self.root.close()
-        QtWidgets.QMessageBox.warning(
-            self.parent, 'Erro', 'Senha ou usuário incorretos')
+        Message.error(self.parent, 'Erro', msg)
         return False

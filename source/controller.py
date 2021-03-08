@@ -23,7 +23,6 @@ class MyApp(Interface):
         self.entryCod.textEdited.connect(self.entryText)
         self.entryCod.returnPressed.connect(self.enterPress)
         self.btSearch.clicked.connect(self.searchItens)
-        self.btThing.clicked.connect(self.finished)
         self.btFinish.clicked.connect(self.finishVars)
         self.btRemove.clicked.connect(self.removeItem)
         self.menuBar.cadProd.triggered.connect(self.cadProdFunc)
@@ -59,6 +58,7 @@ class MyApp(Interface):
             self.vaUni = f'R$ {self.lista[0][2]:.2f}'.replace('.', ',')
             self.currentPrice = f'R$ {self.valor:.2f}'.replace('.', ',')
             self.showCurrent = 'R$ ' + str(self.valActual).replace('.', ',')
+            self.btThing.clicked.connect(self.finished)
             if self.valor > 0:
                 self.item.setText(0, self.lista[0][1])
                 self.item.setText(1, self.quantify + ' x')
@@ -79,6 +79,12 @@ class MyApp(Interface):
             self.tree.takeTopLevelItem(indexItem)
             self.TOTAL -= totalPrice
             self.labelUpdate(item)
+
+    # // chama a função de finalizar a compra atual
+
+    def finished(self):
+        FinallyPurchasing(self, valor=self.TOTAL)
+        return
 
     # // atualiza as amostras de preços da tela...
 
@@ -109,12 +115,11 @@ class MyApp(Interface):
 
     def cadProdFunc(self):
         validate = Login(self)
+        title = 'Erro de autenticação'
         if validate.queryUser() == (True):
             CadProd(self)
-        Message.error(
-            parent=self, title='Erro de autenticação',
-            message='Código ou senha invalido.'
-        )
+        elif validate.queryUser() == (False):
+            Message.error(self, title, 'Desculpe tente novamente')
 
     # // abre janela de cadastro de usuarios
 
@@ -135,11 +140,6 @@ class MyApp(Interface):
 
     def searchItens(self):
         SearchItems(self)
-
-    # // chama a função de finalizar a compra atual
-
-    def finished(self):
-        FinallyPurchasing(self)
 
     # // encerra as operações do dia de caixa ....
 

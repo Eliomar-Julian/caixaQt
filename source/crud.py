@@ -50,3 +50,23 @@ def queryAdmin(search):
     list_ = cur.execute(
         f'SELECT * FROM admin WHERE adm=?', [search])
     return list_.fetchall()
+
+# // retorna todos oa produtos em ordem alfabetica
+
+
+def queryAll():
+    list_ = cur.execute(
+        'SELECT * FROM produtos ORDER BY desc'
+    )
+    return list_.fetchall()
+
+# // busca e deleta itens especificos...
+
+
+def queryAndDelete(search):
+    try:
+        cur.execute('DELETE FROM produtos WHERE desc = ?', [search])
+        con.commit()
+        return True
+    except Exception:
+        return False
