@@ -1,23 +1,25 @@
 #!/usr/bin/python3
+# clean code concept..
 
+from toplevels import Login
+from PySide2 import QtCore
+from PySide2.QtCore import Qt
 from interface import Interface
 from PySide2 import QtWidgets
-from toplevels import SearchItems, FinallyPurchasing, Login
+from toplevels import FinallyPurchasing, SearchItems, Login
 from loadconfigs import saveTotal
 from crud import queryCod
 from menu import CadProd, Message
 
 
 class MyApp(Interface):
-    '''
-    classe de controle de interface...
-    '''
-    TOTAL = float()
+    TOTAL: float = float()
+    ZERO: str = 'R$ 0, 00'
 
-    def __init__(self):
+    def __init__(self: Interface) -> None:
         super(MyApp, self).__init__()
         self.btSearch.function = self.searchItens
-        self.btThing.function = self.finished
+        self.btThing.function = self.finished_thing
         self.btFinish.function = self.finishVars
         self.btRemove.function = self.removeItem
         self.entryCod.textEdited.connect(self.entryText)
@@ -30,35 +32,35 @@ class MyApp(Interface):
         self.menuBar.styl.triggered.connect(self.stylFunc)
         self.menuBar.icon.triggered.connect(self.iconFunc)
         self.menuBar.overCashieAct.triggered.connect(self.overCashieFunc)
+        self.btThing.clicked.connect(self.finished_thing)
         self.entryCod.setFocus()
 
-    # // filtra a entrada de texto para ver se tem algum
-    # multiplicador
-
-    def entryText(self, eventText):
-        self.quantify = str(' 1')
-        self.lista = list()
-        if str('*') in eventText:
-            self.indice_ = eventText.index('*')
-            self.quantify = eventText[self.indice_ + 1:]
-            self.lista = queryCod(eventText[:self.indice_])
+    def entryText(self, event_text: QtCore.QEvent) -> None:
+        self.quantify: str = ' 1'
+        self.lista: list = []
+        self.multiple_index: str = '*'
+        if self.multiple_index in event_text:
+            self.indice_ = event_text.index(self.multiple_index)
+            self.quantify = event_text[self.indice_ + 1:]
+            self.lista = queryCod(event_text[:self.indice_])
         else:
-            self.lista = queryCod(eventText)
+            self.lista = queryCod(event_text)
 
-    # // espera enter ser apertado para atualizar os Widgets
-    # na tela principal.
+    # => automatiza replace...
 
-    def enterPress(self):
+    def replace_(self, string: str, a: str = '.', b: str = ',') -> str.replace:
+        return string.replace(a, b)
+
+    def enterPress(self, update_total: str = None) -> None:
         if self.lista:
             self.item = QtWidgets.QTreeWidgetItem()
             self.valor = int(self.quantify) * self.lista[0][2]
             self.TOTAL += self.valor
-            self.valActual = f'{self.valor:.2f}'
-            self.formatado = str('R$ %.2f' % (self.TOTAL)).replace('.', ',')
-            self.vaUni = f'R$ {self.lista[0][2]:.2f}'.replace('.', ',')
-            self.currentPrice = f'R$ {self.valor:.2f}'.replace('.', ',')
-            self.showCurrent = 'R$ ' + str(self.valActual).replace('.', ',')
-            self.btThing.clicked.connect(self.finished)
+            self.valActual = self.replace_(f'{self.valor:.2f}')
+            self.formatado = self.replace_(str('R$ %.2f' % (self.TOTAL)))
+            self.vaUni = self.replace_(f'R$ {self.lista[0][2]:.2f}')
+            self.currentPrice = self.replace_(f'R$ {self.valor:.2f}')
+            self.showCurrent = self.replace_('R$ ' + str(self.valActual))
             if self.valor > 0:
                 self.item.setText(0, self.lista[0][1])
                 self.item.setText(1, self.quantify + ' x')
@@ -68,60 +70,49 @@ class MyApp(Interface):
                 self.lbPriceCurrent.setText(self.currentPrice)
                 self.lbPriceTotal.setText(self.formatado)
 
-    # // remove os itens selecionados na lista de compras
-
-    def removeItem(self):
+    def removeItem(self) -> None:
         login = Login(self)
         if login.queryUser():
             item = self.tree.currentItem()
-            indexItem = self.tree.indexOfTopLevelItem(item)
-            totalPrice = float(item.text(3)[2:].replace(',', '.'))
-            self.tree.takeTopLevelItem(indexItem)
-            self.TOTAL -= totalPrice
+            index_item = self.tree.indexOfTopLevelItem(item)
+            self.totalPrice = float(self.replace_(item.text(3)[2:], ',', '.'))
+            self.tree.takeTopLevelItem(index_item)
+            self.TOTAL -= self.totalPrice
             self.labelUpdate(item)
 
-    # // chama a função de finalizar a compra atual
+    # => finaliza a venda atual...
 
-    def finished(self):
-        FinallyPurchasing(self, valor=self.TOTAL)
-        return
+    def finished_thing(self) -> None:
+        FinallyPurchasing(self)
 
-    # // atualiza as amostras de preços da tela...
-
-    def labelUpdate(self, i):
+    def labelUpdate(self, item: QtWidgets.QLabel) -> None:
         try:
-            self.lbPriceCurrent.setText(i.text(3))
+            self.lbPriceCurrent.setText(item.text(3))
         except AttributeError:
-            self.lbPriceCurrent.setText('R$ 0,00')
-        self.lbPriceTotal.setText(f'R$ {self.TOTAL:.2f}'.replace('.', ','))
+            self.lbPriceCurrent.setText(self.ZERO)
+        self.lbPriceTotal.setText(self.replace_(f'R$ {self.TOTAL:.2f}'))
 
-    # // finaliza a venda atual e zera variaveis...
-
-    def finishVars(self):
+    def finishVars(self) -> None:
         ok = QtWidgets.QMessageBox.StandardButton.Ok
         cancel = QtWidgets.QMessageBox.StandardButton.Cancel
         message = 'Realmnte deseja finalizar essa compra?'
         title = 'Finalizar'
-        resp = QtWidgets.QMessageBox.warning(
-            self, title, message, ok | cancel)
-        if resp == ok:
+        ms_box = QtWidgets.QMessageBox.warning
+        resp = ms_box(self, title, message, ok | cancel)
+        if resp is ok:
             saveTotal(self.TOTAL)
             self.TOTAL = 0
-            self.lbPriceCurrent.setText('R$ 0,00')
-            self.lbPriceTotal.setText('R$ 0,00')
+            self.lbPriceCurrent.setText(self.ZERO)
+            self.lbPriceTotal.setText(self.ZERO)
             self.tree.clear()
 
-    # // abre janela de cadastro de produtos...
-
-    def cadProdFunc(self):
+    def cadProdFunc(self) -> None:
         validate = Login(self)
         title = 'Erro de autenticação'
-        if validate.queryUser() == (True):
+        if validate.queryUser() is True:
             CadProd(self)
-        elif validate.queryUser() == (False):
+        elif validate.queryUser() is False:
             Message.error(self, title, 'Desculpe tente novamente')
-
-    # // abre janela de cadastro de usuarios
 
     def cadUserFunc(self):
         print('cadUserFunc')

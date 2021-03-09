@@ -1,16 +1,10 @@
 from PySide2 import QtWidgets, QtGui, QtCore
-from crud import *
+from crud import insertData, queryCod, queryAll, queryAndDelete
 from reimplemented import DEFAULT
 
 
-# // Classe que exibe uma messageBox
-
-
 class Message:
-    def sucess(parent, title, message):
-        parent = parent
-        title = title
-        message = message
+    def sucess(parent, title, message) -> QtWidgets.QMessageBox:
         msg = QtWidgets.QMessageBox(parent)
         msg.setWindowTitle(title)
         msg.setText(message)
@@ -18,23 +12,17 @@ class Message:
         msg.setIcon(msg.Icon.Information)
         msg.exec_()
 
-    def error(parent, title, message):
-        parent = parent
-        title = title
-        message = message
+    def error(parent, title, message) -> QtWidgets.QMessageBox:
         msg = QtWidgets.QMessageBox(parent)
         msg.setWindowTitle(title)
         msg.setText(message)
         msg.setStandardButtons(msg.StandardButton.Ok)
         msg.setIcon(msg.Icon.Information)
         msg.exec_()
-
-
-# // classe que define a barra de menu...
 
 
 class MyMenu:
-    def __init__(self, parent=None):
+    def __init__(self, parent: QtWidgets.QWidget = None) -> None:
         self.parent = parent
         self.menuBar = QtWidgets.QMenuBar(self.parent)
         self.menuAdm = QtWidgets.QMenu('Administrar', self.menuBar)
@@ -51,7 +39,7 @@ class MyMenu:
         self.menuBar.setMinimumWidth(300)
         self.shortCuts()
 
-    def shortCuts(self):
+    def shortCuts(self) -> None:
         keys = QtGui.QKeySequence
         qt = QtCore.Qt
         self.cadProd.setShortcut(keys(qt.CTRL + qt.Key_P))
@@ -60,11 +48,8 @@ class MyMenu:
         self.icon.setShortcut(keys(qt.CTRL + qt.Key_I))
 
 
-# // cadastra e remove itens do banco de dados
-
-
 class CadProd:
-    def __init__(self, parent):
+    def __init__(self, parent: QtWidgets.QWidget) -> None:
         self.parent = parent
         self.topLev = QtWidgets.QDialog(self.parent)
         self.lbCode = QtWidgets.QLabel('Código')
@@ -78,7 +63,7 @@ class CadProd:
         self.btAdct = QtWidgets.QPushButton('Adicionar')
         self.btRemo = QtWidgets.QPushButton('Remover')
         self.btExit = QtWidgets.QPushButton('Sair')
-        self.btAdct.clicked.connect(self.getData)
+        self.btAdct.clicked.connect(self.get_data)
         self.btExit.clicked.connect(lambda: self.topLev.close())
         self.btRemo.clicked.connect(self.itemRemove)
         self.treeLi.setHeaderLabels(('Codigo', 'Produto', 'Preço'))
@@ -97,10 +82,8 @@ class CadProd:
         self.lbCode.setFocus()
         self.topLev.exec_()
 
-    # // metodo que valida dados ante de serem inseridos no banco...
-
-    def getData(self):
-        def treeAdd(co, de, pr):
+    def get_data(self) -> insertData:
+        def treeAdd(co: str, de: str, pr: float) -> None:
             item = QtWidgets.QTreeWidgetItem()
             prF = f'R$ {pr:.2f}'.replace('.', ',')
             item.setText(0, co)
@@ -116,10 +99,12 @@ class CadProd:
             noRepeatCod = queryCod(cod)[0][0]
         except IndexError:
             pass
+
         if noRepeatCod:
             msg = f'O Código já está em uso por:\n{queryCod(cod)[0][1]}'
             Message.error(self.parent, 'Codigo ja está em uso', msg)
             return
+            
         if cod != notValid and des != notValid:
             try:
                 pre = self.entPri.text().strip()
@@ -139,9 +124,7 @@ class CadProd:
             msg = 'Código/Descrição devem conter valores!'
             Message.error(self.parent, 'Valores não especificados', msg)
 
-    # // metodo responsavel por eliminar um item do banco
-
-    def itemRemove(self):
+    def itemRemove(self) -> queryAndDelete:
         def remove():
             item = lista.currentItem()
             valid = queryAndDelete(item.text())

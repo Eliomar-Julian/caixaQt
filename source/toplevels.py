@@ -5,18 +5,11 @@ from menu import *
 
 
 class SearchItems:
-    '''
-    classe responsavel por busca os itens no banco
-    e listar no treeview.
-    '''
-
     def __init__(self, parent) -> None:
         self.parent = parent
         self.searchItemsFunction()
 
-    # //Desenha a janela top level de busca
-
-    def searchItemsFunction(self):
+    def searchItemsFunction(self) -> None:
         self.search = QtWidgets.QDialog(self.parent)
         self.grid = QtWidgets.QGridLayout(self.search)
         self.searchLine = QtWidgets.QLineEdit()
@@ -37,52 +30,38 @@ class SearchItems:
         self.search.setTabOrder(self.searchLine, self.listItems)
         self.search.exec_()
 
-    # // Invocado a cada tecla pressionada e varre
-    # dinamicamente o banco.
+    #=> varre o banco...
 
-    def searching(self, e):
+    def searching(self, e) -> None:
         prods = queryCodDynamic(e)
         self.listItems.clear()
         for itens in prods:
             self.listItems.addItems(itens[1:2])
-        self.listItems.currentItemChanged.connect(self.listItemsGet)
-        self.listItems.itemClicked.connect(self.listItemsGet)
+        self.listItems.currentItemChanged.connect(self.list_items_get)
+        self.listItems.itemClicked.connect(self.list_items_get)
 
-    # // pega o produto selecionado e adiciona o codigo
-    # na linha de entrada de codigo da janela principal.
+    #=> lista todos os produtos
 
-    def listItemsGet(self):
+    def list_items_get(self) -> None:
         self.item = self.listItems.currentItem()
         self.prods = queryCodDynamic(self.item.text())
         self.parent.entryCod.clear()
         self.parent.entryCod.insert(self.prods[0][0])
 
-    # // fecha a janela de buscas e direciona o foco
-    # para a linha de entrda da janela principal.
-
-    def concluded(self):
+    def concluded(self) -> None:
         self.search.close()
         self.parent.entryCod.setFocus()
 
 
 class FinallyPurchasing:
-    '''
-    Classe responsavel por finalizar a compra atual
-    e zerar os contadores da janela principal
-    '''
-
-    def __init__(self, parent, valor) -> None:
+    def __init__(self, parent) -> None:
         self.parent = parent
-        self.valor = valor
-        self.top()
-
-    # // desenhando a janela de finalização...
-
-    def top(self):
-        self.root = QtWidgets.QDialog(self.parent)
-        self.grid = QtWidgets.QVBoxLayout(self.root)
+        self.tot = self.parent.TOTAL
+        self.root_ = QtWidgets.QDialog(self.parent)
+        self.grid = QtWidgets.QVBoxLayout(self.root_)
         self.labelInfoTotal = QtWidgets.QLabel('total da compra')
-        self.labelTotal = QtWidgets.QLabel(self.parent.formatado)
+        total_formatted = self.parent.replace_(f'R$ {self.parent.TOTAL:.2f}')
+        self.labelTotal = QtWidgets.QLabel(total_formatted)
         self.especialStyle = 'background: #fff; color: red; font-size: 50pt;'
         self.labelInfoMoney = QtWidgets.QLabel('Dinheiro')
         self.entMoney = QtWidgets.QLineEdit()
@@ -90,14 +69,14 @@ class FinallyPurchasing:
         self.labelThingMoney = QtWidgets.QLabel('R$ 0,00')
         self.buttonConteiner = QtWidgets.QFrame()
         grid = QtWidgets.QGridLayout(self.buttonConteiner)
-        self.btFinished_ = QtWidgets.QPushButton('Sair')
+        self.lb_finished_ = QtWidgets.QLabel('ESC: Sair.')
         self.btCupom_ = QtWidgets.QPushButton('Imprimir cupom')
         self.entMoney.returnPressed.connect(self.thingMoney)
         self.entMoney.setFocus()
         self.labelTotal.setStyleSheet(self.especialStyle)
         self.entMoney.setStyleSheet(self.especialStyle)
         self.labelThingMoney.setStyleSheet(self.especialStyle)
-        self.root.resize(400, 600)
+        self.root_.resize(400, 600)
         self.grid.addWidget(self.labelInfoTotal)
         self.grid.addWidget(self.labelTotal)
         self.grid.addWidget(self.labelInfoMoney)
@@ -105,25 +84,20 @@ class FinallyPurchasing:
         self.grid.addWidget(self.labelThingMoneyInfo)
         self.grid.addWidget(self.labelThingMoney)
         self.grid.addWidget(self.buttonConteiner)
-        grid.addWidget(self.btFinished_, 0, 0)
+        grid.addWidget(self.lb_finished_, 0, 0)
         grid.addWidget(self.btCupom_, 0, 1)
-        self.root.exec_()
+        self.root_.exec_()
 
-    # // mostra o valor do troco na tela.
+    #=> mostra o valor do troco na tela.
 
-    def thingMoney(self):
-        tot = self.valor
+    def thingMoney(self) -> None:
         val = float(self.entMoney.text().replace(',', '.'))
-        show = val - tot
+        show = val - self.tot
         self.labelThingMoney.setText(f'R$ {show:.2f}'.replace('.', ','))
 
 
 class Login:
-    '''
-    Classe que valida os usuários...
-    '''
-
-    def __init__(self, parent):
+    def __init__(self, parent: QtWidgets.QWidget) -> None:
         self.parent = parent
         self.root = QtWidgets.QDialog(self.parent)
         label1 = QtWidgets.QLabel('Usuário: ')
@@ -142,19 +116,18 @@ class Login:
         self.root.resize(400, 200)
         self.root.exec_()
 
-    # // retorna True para se a senha for aceita...
-
-    def queryUser(self):
+    def queryUser(self) -> bool:
         user = self.entName.text()
         passw = self.enPassw.text()
         data = queryAdmin(user)
         msg = 'Senha ou usuário incorretos'
         try:
-            if user == data[0][0] and passw == data[0][1]:
+            teste1 = (user == data[0][0])
+            teste2 = (passw == data[0][1])
+            if teste1 and teste2:
                 self.root.close()
                 return True
         except IndexError:
-            pass
-        self.root.close()
-        Message.error(self.parent, 'Erro', msg)
-        return False
+            self.root.close()
+            Message.error(self.parent, 'Erro', msg)
+            return False

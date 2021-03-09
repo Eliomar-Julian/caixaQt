@@ -8,15 +8,15 @@ from menu import MyMenu
 
 class Interface(QtWidgets.QWidget):
 
-    STYLE = getStyle()
+    STYLE: str = getStyle()
 
-    def __init__(self):
+    def __init__(self) -> None:
         super(Interface, self).__init__()
         self.places = QtWidgets.QGridLayout(self)
         self.places.setContentsMargins(0, 0, 0, 0)
         self.startMethods()
 
-    def startMethods(self):
+    def startMethods(self) -> None:
         self.startLogo()
         self.buttons()
         self.purchasingView()
@@ -25,12 +25,10 @@ class Interface(QtWidgets.QWidget):
         self.pushStyle()
         self.menu()
 
-    # // mostra o logo...
-
-    def menu(self):
+    def menu(self) -> None:
         self.menuBar = MyMenu(self)
 
-    def startLogo(self):
+    def startLogo(self) -> None:
         image = QtGui.QPixmap('images/cart.png')
         self.frameLogo = QtWidgets.QFrame()
         conteiner = QtWidgets.QGridLayout(self.frameLogo)
@@ -41,9 +39,7 @@ class Interface(QtWidgets.QWidget):
         conteiner.addWidget(self.logo)
         self.places.addWidget(self.frameLogo, 0, 0)
 
-    # // desenha o conteiner dos botoes...
-
-    def buttons(self):
+    def buttons(self) -> None:
         self.frameButtons = QtWidgets.QFrame()
         self.btSearch = Buttons('Buscar', HOVER, DEFAULT)
         self.btThing = Buttons('Troco', HOVER, DEFAULT)
@@ -59,27 +55,26 @@ class Interface(QtWidgets.QWidget):
             wid.setCursor(QtCore.Qt.PointingHandCursor)
         self.places.addWidget(self.frameButtons, 1, 0)
 
-    # // desenha a treeview...
-
-    def purchasingView(self):
+    def purchasingView(self) -> None:
         self.framePurchase = QtWidgets.QFrame()
         conteiner = QtWidgets.QGridLayout(self.framePurchase)
         label = QtWidgets.QLabel('Código do Produto: ')
         self.entryCod = QtWidgets.QLineEdit()
         self.tree = QtWidgets.QTreeWidget()
+        not_scroll = QtCore.Qt.ScrollBarAlwaysOff
         self.tree.setWordWrap(False)
         self.tree.setHeaderLabels(('Produto', 'Qunt.', 'Preço', 'Total'))
         self.tree.setColumnWidth(0, 400)
-        self.tree.setHorizontalScrollBarPolicy(QtCore.Qt.ScrollBarAlwaysOff)
-        self.tree.setVerticalScrollBarPolicy(QtCore.Qt.ScrollBarAlwaysOff)
+        self.tree.setHorizontalScrollBarPolicy(not_scroll)
+        self.tree.setVerticalScrollBarPolicy(not_scroll)
         conteiner.addWidget(label)
         conteiner.addWidget(self.entryCod)
         conteiner.addWidget(self.tree)
         self.places.addWidget(self.framePurchase, 0, 1)
 
-    # // mostra os labels de preco total e corrente...
+    #=> preco total e corrente...
 
-    def pricesShow(self):
+    def pricesShow(self) -> None:
         self.framePrices = QtWidgets.QFrame()
         conteiner = QtWidgets.QGridLayout(self.framePrices)
         self.lbPriceText = QtWidgets.QLabel('Preço do Item')
@@ -97,7 +92,7 @@ class Interface(QtWidgets.QWidget):
             wid.setObjectName(str(wid))
         self.places.addWidget(self.framePrices, 0, 2)
 
-    def setWidgetName(self):
+    def setWidgetName(self) -> QtWidgets.QWidget.objectName:
         self.setObjectName('mainWindow')
         self.lbPriceText.setObjectName('showLabelPrice')
         self.lbPriceCurrent.setObjectName('priceCurrentItem')

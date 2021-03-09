@@ -4,66 +4,44 @@ import sqlite3
 
 con = sqlite3.connect('./data/database.db')
 cur = con.cursor()
-cur.execute(
-    'CREATE TABLE IF NOT EXISTS produtos(cod TEXT, desc TEXT, pre FLOAT)'
-)
-cur.execute(
-    '''CREATE TABLE IF NOT EXISTS admin (
+pro = 'CREATE TABLE IF NOT EXISTS produtos(cod TEXT, desc TEXT, pre FLOAT)'
+adm = '''CREATE TABLE IF NOT EXISTS admin (
     adm TEXT NOT NULL,
     pas   TEXT NOT NULL,
     id    INTEGER UNIQUE,
-    PRIMARY KEY("id" AUTOINCREMENT)
-)'''
-)
-
-# // insere os dados nas colunas
+    PRIMARY KEY("id" AUTOINCREMENT))'''
+cur.execute(pro)
+cur.execute(adm)
 
 
-def insertData(codi, desc, prec):
-    cur.execute(
-        'INSERT INTO produtos(cod, desc, pre) VALUES (?,?,?)',
-        [codi, desc, prec]
-    )
+def insertData(codi: str, desc: str, prec: float) -> None:
+    command = 'INSERT INTO produtos(cod, desc, pre) VALUES (?,?,?)'
+    cur.execute(command, [codi, desc, prec])
     con.commit()
 
-# // retorna a lista de produtos de acordo com o codigo
 
-
-def queryCod(search):
+def queryCod(search) -> list:
     list_ = cur.execute(f'SELECT * FROM produtos WHERE cod=?', [search])
     return list_.fetchall()
 
-# // retorna a lista de produtos da busca dinamica...
 
-
-def queryCodDynamic(search):
-    list_ = cur.execute(
-        f'SELECT * FROM produtos WHERE desc LIKE ? ORDER BY cod',
-        ('%' + search + '%',)
-    )
+def queryCodDynamic(search) -> list:
+    command = f'SELECT * FROM produtos WHERE desc LIKE ? ORDER BY cod'
+    list_ = cur.execute(command, ('%' + search + '%',))
     return list_.fetchall()
 
-# // busca a senha e adm do caixa
 
-
-def queryAdmin(search):
-    list_ = cur.execute(
-        f'SELECT * FROM admin WHERE adm=?', [search])
+def queryAdmin(search) -> list:
+    list_ = cur.execute(f'SELECT * FROM admin WHERE adm=?', [search])
     return list_.fetchall()
 
-# // retorna todos oa produtos em ordem alfabetica
 
-
-def queryAll():
-    list_ = cur.execute(
-        'SELECT * FROM produtos ORDER BY desc'
-    )
+def queryAll() -> list:
+    list_ = cur.execute('SELECT * FROM produtos ORDER BY desc')
     return list_.fetchall()
 
-# // busca e deleta itens especificos...
 
-
-def queryAndDelete(search):
+def queryAndDelete(search) -> bool:
     try:
         cur.execute('DELETE FROM produtos WHERE desc = ?', [search])
         con.commit()
