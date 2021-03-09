@@ -29,8 +29,6 @@ class MyApp(Interface):
         self.btRemove.clicked.connect(self.removeItem)
         self.menuBar.cadProd.triggered.connect(self.cadProdFunc)
         self.menuBar.cadUser.triggered.connect(self.cadUserFunc)
-        self.menuBar.styl.triggered.connect(self.stylFunc)
-        self.menuBar.icon.triggered.connect(self.iconFunc)
         self.menuBar.overCashieAct.triggered.connect(self.overCashieFunc)
         self.btThing.clicked.connect(self.finished_thing)
         self.entryCod.setFocus()
@@ -116,18 +114,6 @@ class MyApp(Interface):
 
     def cadUserFunc(self):
         print('cadUserFunc')
-
-    # muda a cor de fundo e de frente da aplicação
-
-    def stylFunc(self):
-        print('stylFunc')
-
-    # // muda o logo do estabelecimento
-
-    def iconFunc(self):
-        print('iconFunc')
-
-    # // chama a função de busca de produtos no banco de dados...
 
     def searchItens(self):
         SearchItems(self)

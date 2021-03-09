@@ -28,12 +28,8 @@ class MyMenu:
         self.menuAdm = QtWidgets.QMenu('Administrar', self.menuBar)
         self.cadProd = self.menuAdm.addAction('Cadastrar e remover produtos')
         self.cadUser = self.menuAdm.addAction('Administrar usuários')
-        self.menuStyle = QtWidgets.QMenu('Aparência', self.menuBar)
-        self.styl = self.menuStyle.addAction('Mudar cores')
-        self.icon = self.menuStyle.addAction('Trocar logo')
         self.overCashieAct = QtWidgets.QAction('Encerrar')
         self.menuBar.addMenu(self.menuAdm)
-        self.menuBar.addMenu(self.menuStyle)
         self.menuBar.addAction(self.overCashieAct)
         self.menuBar.setStyleSheet(self.parent.STYLE)
         self.menuBar.setMinimumWidth(300)
@@ -44,8 +40,6 @@ class MyMenu:
         qt = QtCore.Qt
         self.cadProd.setShortcut(keys(qt.CTRL + qt.Key_P))
         self.cadUser.setShortcut(keys(qt.CTRL + qt.Key_N))
-        self.styl.setShortcut(keys(qt.CTRL + qt.Key_S))
-        self.icon.setShortcut(keys(qt.CTRL + qt.Key_I))
 
 
 class CadProd:
@@ -104,7 +98,7 @@ class CadProd:
             msg = f'O Código já está em uso por:\n{queryCod(cod)[0][1]}'
             Message.error(self.parent, 'Codigo ja está em uso', msg)
             return
-            
+
         if cod != notValid and des != notValid:
             try:
                 pre = self.entPri.text().strip()
