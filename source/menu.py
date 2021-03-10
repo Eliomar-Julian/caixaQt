@@ -151,3 +151,5 @@ class CadProd:
         for x in range(len(listed)):
             lista.insertItem(x, listed[x][1])
         frame.show()
+       
+

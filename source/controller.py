@@ -8,7 +8,7 @@ from interface import Interface
 from PySide2 import QtWidgets
 from toplevels import FinallyPurchasing, SearchItems, Login
 from loadconfigs import saveTotal
-from crud import queryCod
+from crud import queryCod, insert_user
 from menu import CadProd, Message
 
 
@@ -112,8 +112,54 @@ class MyApp(Interface):
         elif validate.queryUser() is False:
             Message.error(self, title, 'Desculpe tente novamente')
 
-    def cadUserFunc(self):
-        print('cadUserFunc')
+    def cadUserFunc(self) -> None:
+        def insert():
+            nul = str('')
+            name = ent_name.text().strip()
+            passw = ent_pass.text().strip()
+            rpass = ent_rpas.text().strip()
+            if name == nul:
+                msg = 'O nome não pode estar vazio'
+                Message.error(self, 'Erro de nome', msg)
+                return
+            if passw != nul and rpass != nul:
+                if passw != rpass:
+                    msg = 'As senhas não coincidem'
+                    Message.error(self, 'Erro de senha', msg)
+                    return
+                insert_user(name, passw)
+            if passw == nul or rpass == nul:
+                msg = 'As senhas não podem estar vazias'
+                Message.error(self, 'Senha em branco', msg)
+
+        login = Login(self)
+        if not login.queryUser():
+            return
+        dial = QtWidgets.QDialog(self)
+        layout = QtWidgets.QGridLayout(dial)
+        labe_name = QtWidgets.QLabel('Nome: ')
+        labe_pass = QtWidgets.QLabel('Senha:')
+        labe_rpas = QtWidgets.QLabel('Repita a senha:')
+        labe_info = QtWidgets.QLabel('ESC: sair.')
+        ent_name = QtWidgets.QLineEdit()
+        ent_pass = QtWidgets.QLineEdit()
+        ent_rpas = QtWidgets.QLineEdit()
+        bt_adc = QtWidgets.QPushButton('Cadastrar')
+        bt_rem = QtWidgets.QPushButton('Remover')
+        dial.resize(400, 300)
+        ent_pass.setEchoMode(QtWidgets.QLineEdit.Password)
+        ent_rpas.setEchoMode(QtWidgets.QLineEdit.Password)
+        bt_adc.clicked.connect(insert)
+        layout.addWidget(labe_name, 0, 0)
+        layout.addWidget(labe_pass, 1, 0)
+        layout.addWidget(labe_rpas, 2, 0)
+        layout.addWidget(ent_name, 0, 1)
+        layout.addWidget(ent_pass, 1, 1)
+        layout.addWidget(ent_rpas, 2, 1)
+        layout.addWidget(bt_adc, 3, 0)
+        layout.addWidget(bt_rem, 3, 1)
+        layout.addWidget(labe_info, 4, 0)
+        dial.exec_()
 
     def searchItens(self):
         SearchItems(self)

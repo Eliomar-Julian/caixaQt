@@ -48,3 +48,8 @@ def queryAndDelete(search) -> bool:
         return True
     except Exception:
         return False
+
+
+def insert_user(user: str, password: str) -> None:
+    cur.execute('INSERT INTO admin(adm, pas) VALUES (?,?)', [user, password])
+    con.commit()
