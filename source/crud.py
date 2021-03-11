@@ -5,8 +5,8 @@ import sqlite3
 con = sqlite3.connect('./data/database.db')
 cur = con.cursor()
 pro = 'CREATE TABLE IF NOT EXISTS produtos(cod TEXT, desc TEXT, pre FLOAT)'
-adm = '''CREATE TABLE IF NOT EXISTS admin (
-    adm TEXT NOT NULL,
+adm = '''CREATE TABLE iF NOT EXISTS admin (
+    adm TEXT NOT NULL UNIQUE,
     pas   TEXT NOT NULL,
     id    INTEGER UNIQUE,
     PRIMARY KEY("id" AUTOINCREMENT))'''
@@ -51,5 +51,18 @@ def queryAndDelete(search) -> bool:
 
 
 def insert_user(user: str, password: str) -> None:
-    cur.execute('INSERT INTO admin(adm, pas) VALUES (?,?)', [user, password])
-    con.commit()
+    try:
+        cur.execute('INSERT INTO admin(adm, pas) VALUES (?,?)', [user, password])
+        con.commit()
+        return True
+    except:
+        return False
+
+
+def load_null_users()-> bool:
+   list_ =  cur.execute('SELECT * FROM admin WHERE adm = adm')
+   verify = list_.fetchall() 
+   if len(verify) != 0:
+       return True
+   return False
+

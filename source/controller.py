@@ -67,6 +67,7 @@ class MyApp(Interface):
                 self.tree.insertTopLevelItem(0, self.item)
                 self.lbPriceCurrent.setText(self.currentPrice)
                 self.lbPriceTotal.setText(self.formatado)
+                self.entryCod.clear()
 
     def removeItem(self) -> None:
         login = Login(self)
@@ -118,6 +119,7 @@ class MyApp(Interface):
             name = ent_name.text().strip()
             passw = ent_pass.text().strip()
             rpass = ent_rpas.text().strip()
+           
             if name == nul:
                 msg = 'O nome não pode estar vazio'
                 Message.error(self, 'Erro de nome', msg)
@@ -127,10 +129,15 @@ class MyApp(Interface):
                     msg = 'As senhas não coincidem'
                     Message.error(self, 'Erro de senha', msg)
                     return
-                insert_user(name, passw)
             if passw == nul or rpass == nul:
                 msg = 'As senhas não podem estar vazias'
                 Message.error(self, 'Senha em branco', msg)
+                return
+            my_return =  insert_user(name, passw)
+            if not my_return:
+                Message.error(self, 'erro', 'Nome ja existe')
+            else:
+                dial.close()
 
         login = Login(self)
         if not login.queryUser():
