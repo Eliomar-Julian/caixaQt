@@ -66,3 +66,12 @@ def load_null_users()-> bool:
        return True
    return False
 
+
+def load_admins() -> None:
+    list_ = cur.execute('SELECT * FROM admin ORDER BY adm')
+    return list_.fetchall()
+
+
+def delete_admins(adm: str) -> None:
+    cur.execute('DELETE FROM admin WHERE adm = ?', [adm])
+    con.commit()

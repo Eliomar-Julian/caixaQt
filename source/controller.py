@@ -8,7 +8,7 @@ from interface import Interface
 from PySide2 import QtWidgets
 from toplevels import FinallyPurchasing, SearchItems, Login
 from loadconfigs import saveTotal
-from crud import queryCod, insert_user
+from crud import queryCod, insert_user, load_admins, delete_admins
 from menu import CadProd, Message
 
 
@@ -139,6 +139,36 @@ class MyApp(Interface):
             else:
                 dial.close()
 
+        def remove() -> None:
+            def listing():
+                adms = load_admins()
+                for ad in adms:
+                    listar.addItem(ad[0])
+
+            def finally_remove():
+                item = listar.currentItem()
+                delete_admins(item.text())
+                listar.clear()
+                btC.setText('Sair')
+                remove()
+                
+            frame = QtWidgets.QFrame(dial)
+            grid = QtWidgets.QVBoxLayout(frame)
+            listar = QtWidgets.QListWidget()
+            btR = QtWidgets.QPushButton('Remover')
+            btC = QtWidgets.QPushButton('Cancelar')
+            grid.addWidget(listar)
+            btR.clicked.connect(finally_remove)
+            btC.clicked.connect(lambda: frame.close())
+            grid.addWidget(btR)
+            grid.addWidget(btC)
+            grid.setContentsMargins(0, 0, 0, 0)
+            listing()
+            frame.resize(400, 300)
+            frame.setStyleSheet('background: black;')
+            frame.show()
+
+
         login = Login(self)
         if not login.queryUser():
             return
@@ -157,6 +187,7 @@ class MyApp(Interface):
         ent_pass.setEchoMode(QtWidgets.QLineEdit.Password)
         ent_rpas.setEchoMode(QtWidgets.QLineEdit.Password)
         bt_adc.clicked.connect(insert)
+        bt_rem.clicked.connect(remove)
         layout.addWidget(labe_name, 0, 0)
         layout.addWidget(labe_pass, 1, 0)
         layout.addWidget(labe_rpas, 2, 0)
