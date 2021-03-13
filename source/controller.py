@@ -204,6 +204,62 @@ class MyApp(Interface):
 
     # // encerra as operações do dia de caixa ....
 
-    def overCashieFunc(self):
+    def overCashieFunc(self) -> None:
         login = Login(self)
-        print(login.queryUser())
+        if not login.queryUser():
+            Message.error(self, 'erro', 'tente novamente!')
+            return
+    
+        def read_(file_, mode) -> None:
+            with open(file_, mode) as saldo:
+                lista = saldo.read()
+                return lista
+
+        def listing() -> None:
+            dados = read_('data/saldo.sd', 'r')
+            wraps = dados.split('\n')
+            value = float()
+            first_time = str()
+            last_time = str()
+            for x in wraps:
+                lista =  x.split(' ')
+                try:
+                    value += float(lista[2])
+                    if first_time == '':
+                        first_time = lista[0]
+                    last_time = lista[0]
+                except:
+                    ...
+            if first_time == '' and last_time == '':
+                first_time = last_time = '0:00'
+            text.setText(dados)
+            label_total.setText(f'<h1>R$ {value:.2f}</h1>'.replace('.', ','))
+            color = 'style="color: red;"'
+            frase = f'<h1 {color}>De {first_time} às {last_time}</h1>'
+            label_info_total.setText(frase)
+
+        def clear_cashie():
+            text.clear()
+            label_total.setText('<h1> R$ 0,00 </h1>')
+            read_('data/saldo.sd', 'w')
+
+        dialog = QtWidgets.QDialog(self)
+        layout = QtWidgets.QGridLayout(dialog)
+        label_info = QtWidgets.QLabel()
+        text = QtWidgets.QTextEdit()
+        label_info_total = QtWidgets.QLabel()
+        label_total = QtWidgets.QLabel('R$ 0,00')
+        button_clear = QtWidgets.QPushButton('limpar caixa')
+        layout.addWidget(label_info)
+        
+        layout.addWidget(text)
+        layout.addWidget(label_info_total)
+        layout.addWidget(label_total)
+        layout.addWidget(button_clear)
+        listing()
+        button_clear.clicked.connect(clear_cashie)
+        dialog.exec_()
+
+
+
+           

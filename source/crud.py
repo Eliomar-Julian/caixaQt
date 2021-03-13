@@ -7,32 +7,32 @@ cur = con.cursor()
 pro = 'CREATE TABLE IF NOT EXISTS produtos(cod TEXT, desc TEXT, pre FLOAT)'
 adm = '''CREATE TABLE iF NOT EXISTS admin (
     adm TEXT NOT NULL UNIQUE,
-    pas   TEXT NOT NULL,
-    id    INTEGER UNIQUE,
-    PRIMARY KEY("id" AUTOINCREMENT))'''
+    pas   text not null,
+    id    integer unique,
+    primary key("id" autoincREMENT))'''
 cur.execute(pro)
 cur.execute(adm)
 
 
 def insertData(codi: str, desc: str, prec: float) -> None:
-    command = 'INSERT INTO produtos(cod, desc, pre) VALUES (?,?,?)'
+    command = 'insert into produtos(cod, desc, pre) VALUES (?,?,?)'
     cur.execute(command, [codi, desc, prec])
     con.commit()
 
 
 def queryCod(search) -> list:
-    list_ = cur.execute(f'SELECT * FROM produtos WHERE cod=?', [search])
+    list_ = cur.execute(f'seLECT * FROM produtos WHERE cod=?', [search])
     return list_.fetchall()
 
 
 def queryCodDynamic(search) -> list:
-    command = f'SELECT * FROM produtos WHERE desc LIKE ? ORDER BY cod'
+    command = f'select * froM produtos WHERE desc LIKE ? ORDER BY cod'
     list_ = cur.execute(command, ('%' + search + '%',))
     return list_.fetchall()
 
 
 def queryAdmin(search) -> list:
-    list_ = cur.execute(f'SELECT * FROM admin WHERE adm=?', [search])
+    list_ = cur.execute(f'seLECT * FROM admin WHERE adm=?', [search])
     return list_.fetchall()
 
 
@@ -75,3 +75,4 @@ def load_admins() -> None:
 def delete_admins(adm: str) -> None:
     cur.execute('DELETE FROM admin WHERE adm = ?', [adm])
     con.commit()
+

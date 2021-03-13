@@ -17,7 +17,7 @@ class Message:
         msg.setWindowTitle(title)
         msg.setText(message)
         msg.setStandardButtons(msg.StandardButton.Ok)
-        msg.setIcon(msg.Icon.Information)
+        msg.setIcon(msg.Icon.Warning)
         msg.exec_()
 
 
@@ -29,7 +29,10 @@ class MyMenu:
         self.cadProd = self.menuAdm.addAction('Cadastrar e remover produtos')
         self.cadUser = self.menuAdm.addAction('Administrar usuários')
         self.overCashieAct = QtWidgets.QAction('Encerrar')
-        self.menuBar.addMenu(self.menuAdm)
+        self.menuAdm.addSeparator()
+        self.changeLogo = self.menuAdm.addAction('Mudar logotipo')
+        self.changeText = self.menuAdm.addAction('Editar Letreiro')
+        self.menuBar.addMenu(self.menuAdm) 
         self.menuBar.addAction(self.overCashieAct)
         self.menuBar.setStyleSheet(self.parent.STYLE)
         self.menuBar.setMinimumWidth(300)
