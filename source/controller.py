@@ -21,12 +21,12 @@ class MyApp(Interface):
         self.btSearch.function = self.searchItens
         self.btThing.function = self.finished_thing
         self.btFinish.function = self.finishVars
-        self.btRemove.function = self.removeItem
         self.entryCod.textEdited.connect(self.entryText)
         self.entryCod.returnPressed.connect(self.enterPress)
         self.btSearch.clicked.connect(self.searchItens)
         self.btFinish.clicked.connect(self.finishVars)
         self.btRemove.clicked.connect(self.removeItem)
+        self.entryCod.textEdited.connect(self.entryText)
         self.menuBar.cadProd.triggered.connect(self.cadProdFunc)
         self.menuBar.cadUser.triggered.connect(self.cadUserFunc)
         self.menuBar.overCashieAct.triggered.connect(self.overCashieFunc)

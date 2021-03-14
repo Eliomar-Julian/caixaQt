@@ -1,7 +1,9 @@
 from reimplemented import *
 from crud import *
 from PySide2 import QtWidgets
+from PySide2 import QtGui
 from menu import *
+
 
 
 class SearchItems:
@@ -71,6 +73,7 @@ class FinallyPurchasing:
         grid = QtWidgets.QGridLayout(self.buttonConteiner)
         self.lb_finished_ = QtWidgets.QLabel('ESC: Sair.')
         self.btCupom_ = QtWidgets.QPushButton('Imprimir cupom')
+        self.btCupom_.clicked.connect(self.print_cupom)
         self.entMoney.returnPressed.connect(self.thingMoney)
         self.entMoney.setFocus()
         self.labelTotal.setStyleSheet(self.especialStyle)
@@ -95,6 +98,8 @@ class FinallyPurchasing:
         show = val - self.tot
         self.labelThingMoney.setText(f'R$ {show:.2f}'.replace('.', ','))
 
+    def print_cupom(self) -> None:
+        print('Falta configurar impressora')
 
 class Login:
     def __init__(self, parent: QtWidgets.QWidget) -> None:
@@ -120,7 +125,6 @@ class Login:
         user = self.entName.text()
         passw = self.enPassw.text()
         data = queryAdmin(user)
-        msg = 'Senha ou usuário incorretos'
         try:
             teste1 = (user == data[0][0])
             teste2 = (passw == data[0][1])
@@ -129,5 +133,4 @@ class Login:
                 return True
         except IndexError:
             self.root.close()
-            Message.error(self.parent, 'Erro', msg)
             return False
