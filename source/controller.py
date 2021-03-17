@@ -29,6 +29,8 @@ class MyApp(Interface):
         self.entryCod.textEdited.connect(self.entryText)
         self.menuBar.cadProd.triggered.connect(self.cadProdFunc)
         self.menuBar.cadUser.triggered.connect(self.cadUserFunc)
+        self.menuBar.changeLogo.triggered.connect(self.changeLogo)
+        self.menuBar.changeText.triggered.connect(self.changeText)
         self.menuBar.overCashieAct.triggered.connect(self.overCashieFunc)
         self.btThing.clicked.connect(self.finished_thing)
         self.entryCod.setFocus()
@@ -259,6 +261,32 @@ class MyApp(Interface):
         listing()
         button_clear.clicked.connect(clear_cashie)
         dialog.exec_()
+
+    def changeLogo(self):
+        file_ = QtWidgets.QFileDialog.getOpenFileName(self, 'abrir imagem', '~', 'Tipos de imagem(*.png *.jpg *.bmp)')
+        print(file_)
+        self.logo.setPixmap(file_[0])
+
+    def changeText(self):
+        def change():
+            frase = entry.text()
+            self.timer.timeout.disconnect()
+            self.label_latters.clear()
+            self.nameMarket(frase)
+            
+        frame = QtWidgets.QDialog(self)
+        layout = QtWidgets.QVBoxLayout(frame)
+        label1 = QtWidgets.QLabel('escreva um letreiro')
+        entry = QtWidgets.QLineEdit()
+        label2 = QtWidgets.QLabel('ESC: sair   ENTER: confirmar')
+        layout.addWidget(label1)
+        layout.addWidget(entry)
+        layout.addWidget(label2)
+        frame.show()
+        entry.setPlaceholderText('letreiro...')
+        entry.returnPressed.connect(change)
+        frame.resize(300, 300)
+        frame.exec_()
 
 
 

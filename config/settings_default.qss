@@ -1,0 +1,81 @@
+#mainWindow{
+	background-color:  #181915;
+}
+QMenuBar {
+	background-color: #181915;
+	color: #5d5e5b;
+}
+QPushButton{
+	background-color:  #181915;
+	selection-color: #fff;
+	selection-background-color: #fff;
+	border-width: 1px;
+	border-style: solid;
+	border-color: red;
+	border-radius: 5px;
+	padding: 5px;
+	font: 200 15pt "Arial sans-serif";
+	margin: 10px;
+	color:  #5d5e5b;
+}
+QPushButton:hover{
+	background-color: qlineargradient(
+	spread:pad, x1:0.148492, y1:0.261,
+	x2:0.928, y2:0.54, stop:0 rgba(109, 201, 222, 20),
+	stop:1 rgba(255, 255, 255, 50));
+	color: red;
+}
+#showLabelPrice{
+	color: #5d5e5b;
+	font: 200 30pt "Arial";
+	margin-bottom: 0px;
+}
+#priceCurrentItem{
+	color: red;
+	font: 200 40pt "Arial";
+	margin-bottom: 0px;	
+}
+#labelTextPriceTotal{
+	color: #5d5e5b;
+	font: 200 30pt "Arial";
+	margin-bottom: 0px;
+}
+#labelPriceTotal{
+	color: red;
+	font: 200 40pt "Arial";
+	margin-bottom: 0px;	
+}
+QLineEdit{
+	font: 100 12pt "Arial";
+	color: #000000;
+	padding: 5px;
+	border-radius: 5px;
+	background: rgba(255, 255, 255, 225);
+}
+QLabel{
+	font: 300 20pt "Arial";
+	color: #5d5e5b;
+	border-radius: 10px;
+	padding: 5px;
+}
+QTreeWidget{
+	border-radius: 10px;
+	border-width: 1px;
+	border-style: solid;
+	border-color: red;
+	border-radius: 5px;
+	background:  #fff;
+	color: #000;
+}
+QDialog {
+	background-color:  #181915;
+}
+QFrame {
+	background: rgba(18, 19, 15, 0);
+	color: #5d5e5b;
+	font-size: 12pt;
+}
+QScrollBar {
+	background: #000;
+	color: #000;
+}

@@ -9,6 +9,7 @@ from menu import MyMenu
 class Interface(QtWidgets.QWidget):
 
     STYLE: str = getStyle()
+    XX: int = 0
 
     def __init__(self) -> None:
         super(Interface, self).__init__()
@@ -24,6 +25,7 @@ class Interface(QtWidgets.QWidget):
         self.setWidgetName()
         self.pushStyle()
         self.menu()
+        self.nameMarket()
 
     def menu(self) -> None:
         self.menuBar = MyMenu(self)
@@ -91,6 +93,24 @@ class Interface(QtWidgets.QWidget):
             conteiner.addWidget(wid)
             wid.setObjectName(str(wid))
         self.places.addWidget(self.framePrices, 0, 2)
+
+    def nameMarket(self, label_t: str = 'mercadinho') -> None:
+        def animation():
+            self.label_latters.move(self.XX, 100)
+            CONSTANT_WIDTH = frame.geometry().width() 
+            t_max = self.label_latters.geometry().getRect()[2]
+            self.XX -= 1
+            if self.XX <= -t_max:
+                self.XX = CONSTANT_WIDTH
+
+        frame = QtWidgets.QFrame()
+        self.label_latters = QtWidgets.QLabel(label_t, frame)
+        self.XX = frame.geometry().width()
+        self.timer = QtCore.QTimer(self)
+        self.timer.start(10)
+        self.timer.timeout.connect(animation)
+        self.label_latters.setStyleSheet('font-size: 100pt;')
+        self.places.addWidget(frame, 1, 1, 1, 2)
 
     def setWidgetName(self) -> QtWidgets.QWidget.objectName:
         self.setObjectName('mainWindow')

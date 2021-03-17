@@ -45,6 +45,7 @@ def if_not_admin(parent: QtWidgets.QWidget) -> None:
 if __name__ == '__main__':
     app = QtWidgets.QApplication(sys.argv)
     form = MyApp()
+    form.showMaximized()
     if_not_admin(form)
     form.show()
     sys.exit(app.exec_())

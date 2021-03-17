@@ -1,4 +1,5 @@
 from PySide2 import QtWidgets, QtCore
+from time import sleep
 
 HOVER = 'background-color: qlineargradient(\
 spread:pad, x1:0.148492, y1:0.261, x2:0.928,\
