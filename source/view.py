@@ -1,5 +1,5 @@
 from controller import MyApp, QtWidgets
-from crud import load_null_users, insert_user 
+from crud import load_null_users, insert_user
 from menu import Message
 import sys
 
@@ -11,7 +11,7 @@ def if_not_admin(parent: QtWidgets.QWidget) -> None:
             ent1 = ent_name.text().strip()
             ent2 = ent_pass.text().strip()
             if ent1 == '':
-                msg ='O nome não pode estar em branco'
+                msg = 'O nome não pode estar em branco'
                 Message.error(parent, 'erro', msg)
                 return
             capture = insert_user(ent1, ent2)

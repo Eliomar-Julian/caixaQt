@@ -5,7 +5,6 @@ from PySide2 import QtGui
 from menu import *
 
 
-
 class SearchItems:
     def __init__(self, parent) -> None:
         self.parent = parent
@@ -32,7 +31,7 @@ class SearchItems:
         self.search.setTabOrder(self.searchLine, self.listItems)
         self.search.exec_()
 
-    #=> varre o banco...
+    # => varre o banco...
 
     def searching(self, e) -> None:
         prods = queryCodDynamic(e)
@@ -42,7 +41,7 @@ class SearchItems:
         self.listItems.currentItemChanged.connect(self.list_items_get)
         self.listItems.itemClicked.connect(self.list_items_get)
 
-    #=> lista todos os produtos
+    # => lista todos os produtos
 
     def list_items_get(self) -> None:
         self.item = self.listItems.currentItem()
@@ -91,7 +90,7 @@ class FinallyPurchasing:
         grid.addWidget(self.btCupom_, 0, 1)
         self.root_.exec_()
 
-    #=> mostra o valor do troco na tela.
+    # => mostra o valor do troco na tela.
 
     def thingMoney(self) -> None:
         val = float(self.entMoney.text().replace(',', '.'))
@@ -100,6 +99,7 @@ class FinallyPurchasing:
 
     def print_cupom(self) -> None:
         print('Falta configurar impressora')
+
 
 class Login:
     def __init__(self, parent: QtWidgets.QWidget) -> None:

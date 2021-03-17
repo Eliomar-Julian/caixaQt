@@ -32,7 +32,7 @@ class MyMenu:
         self.menuAdm.addSeparator()
         self.changeLogo = self.menuAdm.addAction('Mudar logotipo')
         self.changeText = self.menuAdm.addAction('Editar Letreiro')
-        self.menuBar.addMenu(self.menuAdm) 
+        self.menuBar.addMenu(self.menuAdm)
         self.menuBar.addAction(self.overCashieAct)
         self.menuBar.setStyleSheet(self.parent.STYLE)
         self.menuBar.setMinimumWidth(300)
@@ -154,5 +154,3 @@ class CadProd:
         for x in range(len(listed)):
             lista.insertItem(x, listed[x][1])
         frame.show()
-       
-

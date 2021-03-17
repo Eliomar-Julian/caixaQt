@@ -121,7 +121,7 @@ class MyApp(Interface):
             name = ent_name.text().strip()
             passw = ent_pass.text().strip()
             rpass = ent_rpas.text().strip()
-           
+
             if name == nul:
                 msg = 'O nome não pode estar vazio'
                 Message.error(self, 'Erro de nome', msg)
@@ -135,7 +135,7 @@ class MyApp(Interface):
                 msg = 'As senhas não podem estar vazias'
                 Message.error(self, 'Senha em branco', msg)
                 return
-            my_return =  insert_user(name, passw)
+            my_return = insert_user(name, passw)
             if not my_return:
                 Message.error(self, 'erro', 'Nome ja existe')
             else:
@@ -153,7 +153,7 @@ class MyApp(Interface):
                 listar.clear()
                 btC.setText('Sair')
                 remove()
-                
+
             frame = QtWidgets.QFrame(dial)
             grid = QtWidgets.QVBoxLayout(frame)
             listar = QtWidgets.QListWidget()
@@ -169,7 +169,6 @@ class MyApp(Interface):
             frame.resize(400, 300)
             frame.setStyleSheet('background: black;')
             frame.show()
-
 
         login = Login(self)
         if not login.queryUser():
@@ -211,7 +210,7 @@ class MyApp(Interface):
         if not login.queryUser():
             Message.error(self, 'erro', 'tente novamente!')
             return
-    
+
         def read_(file_, mode) -> None:
             with open(file_, mode) as saldo:
                 lista = saldo.read()
@@ -224,7 +223,7 @@ class MyApp(Interface):
             first_time = str()
             last_time = str()
             for x in wraps:
-                lista =  x.split(' ')
+                lista = x.split(' ')
                 try:
                     value += float(lista[2])
                     if first_time == '':
@@ -253,7 +252,7 @@ class MyApp(Interface):
         label_total = QtWidgets.QLabel('R$ 0,00')
         button_clear = QtWidgets.QPushButton('limpar caixa')
         layout.addWidget(label_info)
-        
+
         layout.addWidget(text)
         layout.addWidget(label_info_total)
         layout.addWidget(label_total)
@@ -263,7 +262,8 @@ class MyApp(Interface):
         dialog.exec_()
 
     def changeLogo(self):
-        file_ = QtWidgets.QFileDialog.getOpenFileName(self, 'abrir imagem', '~', 'Tipos de imagem(*.png *.jpg *.bmp)')
+        file_ = QtWidgets.QFileDialog.getOpenFileName(
+            self, 'abrir imagem', '~', 'Tipos de imagem(*.png *.jpg *.bmp)')
         print(file_)
         self.logo.setPixmap(file_[0])
 
@@ -273,7 +273,7 @@ class MyApp(Interface):
             self.timer.timeout.disconnect()
             self.label_latters.clear()
             self.nameMarket(frase)
-            
+
         frame = QtWidgets.QDialog(self)
         layout = QtWidgets.QVBoxLayout(frame)
         label1 = QtWidgets.QLabel('escreva um letreiro')
@@ -287,7 +287,3 @@ class MyApp(Interface):
         entry.returnPressed.connect(change)
         frame.resize(300, 300)
         frame.exec_()
-
-
-
-           

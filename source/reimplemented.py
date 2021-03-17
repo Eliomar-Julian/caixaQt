@@ -18,7 +18,7 @@ class Buttons(QtWidgets.QPushButton):
         self.function = None
         QtWidgets.QPushButton.__init__(self)
         self.setText(self.text_)
-    
+
     def focusInEvent(self, event: QtCore.QEvent.FocusIn) -> None:
         self.setStyleSheet(self.style_)
 
