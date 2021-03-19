@@ -70,7 +70,7 @@ de sua preferencia.
 ### mudar o letreiro
 
 o letreiro serve para exibir o nome do mercado ou qualquer frase de sua prefência, para acessar
-user **administra->editar letreiro** e mude para a frase que quiser, o campo de mudança aceita
+use **administrar->editar letreiro** e mude para a frase que quiser, o campo de mudança aceita
 html injection sendo possivel mudar as cores e fontes através de tags html.
 
 ### encerrando o periodo de caixa

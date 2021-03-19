@@ -11,7 +11,7 @@ mesma através de seus métodos.
 1. entryText.
 	- responsável por capturar a entrada de texto
 2. replace_.
-	- automatiza o método build in **replace*r para substiruir **.** por **,**.
+	- automatiza o método build in **replace** para substiruir **.** por **,**.
 3. enterPress.
 	- captura o **enter** quando pressionado afim de pegar o texto presente no campode inserção.
 4. removeItem.
@@ -37,7 +37,7 @@ mesma através de seus métodos.
 
 ## reimplemented
 
-responsavel por reimplementar botoes e capturar seu eventos.
+responsavel por reimplementar botoes e capturar seus eventos.
 
 ## topleves
 
@@ -46,7 +46,7 @@ dialogo exibidas ao clicar em qualquer coisa (seja menú ou botões) na janela p
 
 ## crud
 
-detem todo acesso ao banco de dados através de sues métodos
+detem todo acesso ao banco de dados através de seus métodos
 
 |                 MÉTODO           |     FUNÇÃO                              |
 |----------------------------------|-----------------------------------------|
