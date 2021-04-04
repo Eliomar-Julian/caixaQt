@@ -1,49 +1,67 @@
-import sqlite3
+import mysql.connector
+import configparser
+
+# // lendo configurações do banco de dados do usuario
+
+config = configparser.ConfigParser()
+config.read('./mysql-server.ini')
+connec = [
+    config['Server-mysql']['host'],
+    config['Server-mysql']['user'],
+    config['Server-mysql']['password'],
+    config['Server-mysql']['database'],
+]
 
 # // criação das tabelas
 
-con = sqlite3.connect('./data/database.db')
+con = mysql.connector.connect(
+    host=connec[0], user=connec[1], 
+    password=connec[2], database=connec[3]
+)
 cur = con.cursor()
-pro = 'CREATE TABLE IF NOT EXISTS produtos(cod TEXT, desc TEXT, pre FLOAT)'
-adm = '''CREATE TABLE iF NOT EXISTS admin (
-    adm TEXT NOT NULL UNIQUE,
-    pas   text not null,
-    id    integer unique,
-    primary key("id" autoincREMENT))'''
-cur.execute(pro)
-cur.execute(adm)
+cur.execute(
+    '''CREATE TABLE IF NOT EXISTS produtos (
+    cod VARCHAR(10), des VARCHAR(100), pre FLOAT);'''
+)
+cur.execute(
+    '''CREATE TABLE IF NOT EXISTS admin (
+        `adm` VARCHAR(100) NOT NULL UNIQUE, 
+        `pas` VARCHAR(20) NOT NULL, 
+        `id` INT AUTO_INCREMENT UNIQUE, 
+        PRIMARY KEY(`id`));'''
+)
 
 
 def insertData(codi: str, desc: str, prec: float) -> None:
-    command = 'insert into produtos(cod, desc, pre) VALUES (?,?,?)'
-    cur.execute(command, [codi, desc, prec])
+    command = 'INSERT INTO produtos (cod, des, pre) VALUES (%s, %s , %s);'
+    cur.execute(command, (codi, desc, prec))
     con.commit()
 
 
 def queryCod(search) -> list:
-    list_ = cur.execute(f'seLECT * FROM produtos WHERE cod=?', [search])
-    return list_.fetchall()
+    cur.execute(f"SELECT * FROM produtos WHERE cod = '%s';" % (search))
+    return cur.fetchall()
 
 
 def queryCodDynamic(search) -> list:
-    command = f'select * froM produtos WHERE desc LIKE ? ORDER BY cod'
-    list_ = cur.execute(command, ('%' + search + '%',))
-    return list_.fetchall()
+    command = "SELECT * FROM produtos WHERE des LIKE '%s' ORDER BY `cod`;"
+    cur.execute(command %('%'+search+'%'))
+    return cur.fetchall()
 
 
 def queryAdmin(search) -> list:
-    list_ = cur.execute(f'seLECT * FROM admin WHERE adm=?', [search])
-    return list_.fetchall()
+    cur.execute("SELECT * FROM admin WHERE adm LIKE '%s';" % (search))
+    return cur.fetchall()
 
 
 def queryAll() -> list:
-    list_ = cur.execute('SELECT * FROM produtos ORDER BY desc')
-    return list_.fetchall()
+    cur.execute('SELECT * FROM produtos ORDER BY des;')
+    return cur.fetchall()
 
 
 def queryAndDelete(search) -> bool:
     try:
-        cur.execute('DELETE FROM produtos WHERE desc = ?', [search])
+        cur.execute("DELETE FROM produtos WHERE des = '%s';" % (search))
         con.commit()
         return True
     except Exception:
@@ -52,7 +70,8 @@ def queryAndDelete(search) -> bool:
 
 def insert_user(user: str, password: str) -> None:
     try:
-        cur.execute('INSERT INTO admin(adm, pas) VALUES (?,?)', [user, password])
+        cur.execute('INSERT INTO admin(adm, pas) VALUES (%s, %s);', 
+            (user, password))
         con.commit()
         return True
     except:
@@ -60,19 +79,19 @@ def insert_user(user: str, password: str) -> None:
 
 
 def load_null_users()-> bool:
-   list_ =  cur.execute('SELECT * FROM admin WHERE adm = adm')
-   verify = list_.fetchall() 
+   cur.execute('SELECT * FROM admin WHERE adm = adm;') 
+   verify = cur.fetchall()
    if len(verify) != 0:
        return True
    return False
 
 
 def load_admins() -> None:
-    list_ = cur.execute('SELECT * FROM admin ORDER BY adm')
-    return list_.fetchall()
+    cur.execute('SELECT * FROM admin ORDER BY adm;')
+    return cur.fetchall()
 
 
 def delete_admins(adm: str) -> None:
-    cur.execute('DELETE FROM admin WHERE adm = ?', [adm])
+    cur.execute("DELETE FROM admin WHERE adm = '%s';" % (adm))
     con.commit()
 

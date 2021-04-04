@@ -2,6 +2,28 @@
 Programa tipo PDV para pequenos mercados de unico caixa.
 Feito em Python e Qt caixaQt é ideal para pequnos negocios.
 
+## Instalando dependencias.
+1. instale o serviço Mysql em sua maquina e configure um database vazio para receber dados.
+    - basta iniciar um database vazio.
+2. Tenha o python apartir da versão 3.7 devidamente configurado.
+    - Instale as dependencias do python.
+        - __Linux:__  ```pip3 install -r requirements.txt```
+        - __Windows:__  ```pip install -r requirements.txt```
+3. Configure o arquivo de inicialização __mysql-server.ini__ para configurar as opçoes de seu mysql server.
+    - ```
+        [Server-mysql]
+        host = endereco_servidor
+        user = usuário_cadastrado
+        password = sua_senha_admistrador
+        database = nome_do_database
+
+        [Docs]
+        repository = https://github.com/Eliomar-Julian/caixaQt
+        myGithub = https://github.com/Eliomar-Julian
+        ```
+## tela inicial
+#
+#
 <a href="https://imgur.com/1b1EQ6Q"><img width=480 height=360 src="https://i.imgur.com/1b1EQ6Q.png" title="source: imgur.com" /></a>
 
 # Manual de usuário.

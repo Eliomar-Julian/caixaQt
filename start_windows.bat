@@ -1,2 +1,2 @@
 @echo off
-start pythonw.exe source view.py
+start pythonw.exe source/view.py
