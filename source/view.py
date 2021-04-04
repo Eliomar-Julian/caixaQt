@@ -1,3 +1,4 @@
+from PySide2 import QtGui, QtCore
 from controller import MyApp, QtWidgets
 from crud import load_null_users, insert_user
 from menu import Message
@@ -45,6 +46,8 @@ def if_not_admin(parent: QtWidgets.QWidget) -> None:
 if __name__ == '__main__':
     app = QtWidgets.QApplication(sys.argv)
     form = MyApp()
+    form.setWindowTitle("CaixaQt | PDV sistema")
+    form.setWindowIcon(QtGui.QIcon("images/cart.png"))
     form.showMaximized()
     if_not_admin(form)
     form.show()

@@ -20,6 +20,7 @@ class SearchItems:
         self.fraseCmpl = f'ENTER:confirmar{" "*5}ESPAÇO:listar'
         self.frase = self.fraseInit + self.fraseCmpl
         self.infos = QtWidgets.QLabel(self.frase)
+        self.search.setWindowTitle("Faca uma busca")
         self.infos.setStyleSheet('font-size: 15px;')
         self.btSearch.clicked.connect(self.concluded)
         self.searchLine.textEdited.connect(self.searching)
@@ -72,6 +73,7 @@ class FinallyPurchasing:
         grid = QtWidgets.QGridLayout(self.buttonConteiner)
         self.lb_finished_ = QtWidgets.QLabel('ESC: Sair.')
         self.btCupom_ = QtWidgets.QPushButton('Imprimir cupom')
+        self.root_.setWindowTitle("Dialogo de Troco")
         self.btCupom_.clicked.connect(self.print_cupom)
         self.entMoney.returnPressed.connect(self.thingMoney)
         self.entMoney.setFocus()
@@ -111,6 +113,7 @@ class Login:
         self.enPassw = QtWidgets.QLineEdit()
         self.btOk = QtWidgets.QPushButton('Ok')
         grid = QtWidgets.QGridLayout(self.root)
+        self.root.setWindowTitle("Janela de login")
         self.enPassw.setEchoMode(QtWidgets.QLineEdit.Password)
         self.btOk.clicked.connect(self.queryUser)
         grid.addWidget(label1, 0, 0)

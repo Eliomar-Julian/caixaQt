@@ -184,6 +184,7 @@ class MyApp(Interface):
         ent_rpas = QtWidgets.QLineEdit()
         bt_adc = QtWidgets.QPushButton('Cadastrar')
         bt_rem = QtWidgets.QPushButton('Remover')
+        dial.setWindowTitle("Cadastro e remoção de usuários")
         dial.resize(400, 300)
         ent_pass.setEchoMode(QtWidgets.QLineEdit.Password)
         ent_rpas.setEchoMode(QtWidgets.QLineEdit.Password)
@@ -251,6 +252,7 @@ class MyApp(Interface):
         label_info_total = QtWidgets.QLabel()
         label_total = QtWidgets.QLabel('R$ 0,00')
         button_clear = QtWidgets.QPushButton('limpar caixa')
+        dialog.setWindowTitle("Limpando o caixa")
         layout.addWidget(label_info)
 
         layout.addWidget(text)
@@ -264,7 +266,6 @@ class MyApp(Interface):
     def changeLogo(self):
         file_ = QtWidgets.QFileDialog.getOpenFileName(
             self, 'abrir imagem', '~', 'Tipos de imagem(*.png *.jpg *.bmp)')
-        print(file_)
         self.logo.setPixmap(file_[0])
 
     def changeText(self):
@@ -279,6 +280,7 @@ class MyApp(Interface):
         label1 = QtWidgets.QLabel('escreva um letreiro')
         entry = QtWidgets.QLineEdit()
         label2 = QtWidgets.QLabel('ESC: sair   ENTER: confirmar')
+        frame.setWindowTitle("Mudar letreiro")
         layout.addWidget(label1)
         layout.addWidget(entry)
         layout.addWidget(label2)

@@ -61,6 +61,7 @@ class CadProd:
         self.btRemo = QtWidgets.QPushButton('Remover')
         self.btExit = QtWidgets.QPushButton('Sair')
         self.btAdct.clicked.connect(self.get_data)
+        self.topLev.setWindowTitle("Cadastro e remoção de produtos")
         self.btExit.clicked.connect(lambda: self.topLev.close())
         self.btRemo.clicked.connect(self.itemRemove)
         self.treeLi.setHeaderLabels(('Codigo', 'Produto', 'Preço'))
