@@ -41,8 +41,8 @@ class MyApp(Interface):
         self.multiple_index: str = '*'
         if self.multiple_index in event_text:
             self.indice_ = event_text.index(self.multiple_index)
-            self.quantify = event_text[self.indice_ + 1:]
-            self.lista = queryCod(event_text[:self.indice_])
+            self.quantify = event_text[:self.indice_]
+            self.lista = queryCod(event_text[self.indice_ + 1:])
         else:
             self.lista = queryCod(event_text)
 
@@ -289,3 +289,8 @@ class MyApp(Interface):
         entry.returnPressed.connect(change)
         frame.resize(300, 300)
         frame.exec_()
+
+    def keyPressEvent(self, event):
+        if event.key() == QtCore.Qt.Key_Delete:
+            self.removeItem()
+
