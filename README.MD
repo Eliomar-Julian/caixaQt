@@ -102,6 +102,10 @@ todas a vendas finalizadas, o início do periodo do caixa e o total contido no c
 momento. Para retirar o mantante pressione o botão **limpar caixa**, todo o montante será zerado e o 
 periodo se reiniciará.
 
+# Use andróid como leitor de código de barras
+[barcode to pc](https://barcodetopc.com/)
+basta baixar um cliente para o pc e o app oficial na Play Store.
+
 # Desenvolvedores...🧑‍💻
 
 [acesse a documentação](./DOC.MD)
