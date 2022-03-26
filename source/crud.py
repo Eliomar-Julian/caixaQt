@@ -21,7 +21,7 @@ con = mysql.connector.connect(
 cur = con.cursor()
 cur.execute(
     '''CREATE TABLE IF NOT EXISTS produtos (
-    cod VARCHAR(10), des VARCHAR(100), pre FLOAT);'''
+    cod VARCHAR(30), des VARCHAR(100), pre FLOAT);'''
 )
 cur.execute(
     '''CREATE TABLE IF NOT EXISTS admin (
